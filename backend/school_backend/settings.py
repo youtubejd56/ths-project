@@ -14,11 +14,17 @@ load_dotenv(BASE_DIR / ".env")
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "insecure-dev-key")
 DEBUG = os.getenv("DJANGO_DEBUG", "True").lower() in ("1", "true", "yes")
 
-ALLOWED_HOSTS = (
-    [h.strip() for h in os.getenv("ALLOWED_HOSTS", "").split(",") if h.strip()]
-    if os.getenv("ALLOWED_HOSTS")
-    else ["127.0.0.1", "localhost"]
-)
+# ALLOWED_HOSTS = (
+#     [h.strip() for h in os.getenv("ALLOWED_HOSTS", "").split(",") if h.strip()]
+#     if os.getenv("ALLOWED_HOSTS")
+#     else ["127.0.0.1", "localhost"]
+# )
+ALLOWED_HOSTS = [
+    ".onrender.com",
+    "localhost",
+    "127.0.0.1",
+]
+
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
