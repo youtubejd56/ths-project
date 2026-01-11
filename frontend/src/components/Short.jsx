@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { Upload, X, Video, FileText, Image } from "lucide-react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import API_BASE_URL from "../api/config";
 
-const API_URL = "http://127.0.0.1:8000/api/shorts/";
+const API_URL = `${API_BASE_URL}/api/shorts/`;
 
 const Short = () => {
   const [video, setVideo] = useState(null);

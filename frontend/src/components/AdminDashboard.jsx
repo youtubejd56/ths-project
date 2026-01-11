@@ -15,7 +15,9 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const API_BASE = "http://127.0.0.1:8000/api";
+import API_BASE_URL from "../api/config";
+
+const API_BASE = `${API_BASE_URL}/api`;
 
 // axios instance
 const api = axios.create({

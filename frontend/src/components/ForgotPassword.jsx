@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { Mail, ArrowLeft, Shield, CheckCircle, Lock } from 'lucide-react';
+import API_BASE_URL from "../api/config";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -16,7 +17,7 @@ const ForgotPassword = () => {
     setMessage("");
 
     try {
-      await axios.post("http://127.0.0.1:8000/api/admin-send-otp/", { email });
+      await axios.post(`${API_BASE_URL}/api/admin-send-otp/`, { email });
       setMessage("OTP sent to your email.");
       setTimeout(() => navigate("/verify-otp", { state: { email } }), 800);
     } catch (error) {

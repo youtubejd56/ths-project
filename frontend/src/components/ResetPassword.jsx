@@ -2,6 +2,7 @@ import { useLocation, useNavigate, Link } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 import { Lock, Eye, EyeOff, CheckCircle, AlertCircle, ArrowLeft, Shield, Key, Sparkles } from 'lucide-react';
+import API_BASE_URL from "../api/config";
 
 const ResetPassword = () => {
   const location = useLocation();
@@ -20,7 +21,7 @@ const ResetPassword = () => {
     setIsSuccess(false);
 
     try {
-      await axios.post("http://127.0.0.1:8000/api/admin-reset-password/", {
+      await axios.post(`${API_BASE_URL}/api/admin-reset-password/`, {
         email,
         password,
       });

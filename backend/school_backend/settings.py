@@ -82,6 +82,7 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost",
     "http://127.0.0.1",
     "http://localhost:5173",
+    "https://ths-frontend-p8v4.onrender.com",
 ]
 
 # -------------------------------------------------

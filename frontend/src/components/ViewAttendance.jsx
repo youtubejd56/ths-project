@@ -4,7 +4,9 @@ import { useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 
-const API_URL = "https://ths-backend-pvu4.onrender.com";
+import API_BASE_URL from "../api/config";
+
+const API_URL = `${API_BASE_URL}/api/attendance/`;
 
 const ViewAttendance = () => {
   const [records, setRecords] = useState([]);

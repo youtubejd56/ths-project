@@ -3,6 +3,7 @@ import axios from 'axios';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
+import API_BASE_URL from '../api/config';
 
 const AdmissionData = () => {
   const [admissions, setAdmissions] = useState([]);
@@ -14,7 +15,7 @@ const AdmissionData = () => {
 
   const fetchAdmissions = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/admissiondata/");
+      const response = await axios.get(`${API_BASE_URL}/api/admissiondata/`);
       setAdmissions(response.data);
     } catch (error) {
       console.error("Error fetching admission data:", error);

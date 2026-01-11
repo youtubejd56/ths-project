@@ -2,6 +2,7 @@ import { useLocation, useNavigate, Link } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 import { Shield, CheckCircle, AlertCircle, ArrowLeft, KeyRound, Sparkles } from 'lucide-react';
+import API_BASE_URL from "../api/config";
 
 
 const VerifyOtp = () => {
@@ -20,7 +21,7 @@ const VerifyOtp = () => {
     setIsSuccess(false);
 
     try {
-      await axios.post("http://127.0.0.1:8000/api/admin-verify-otp/", { email, otp });
+      await axios.post(`${API_BASE_URL}/api/admin-verify-otp/`, { email, otp });
       setIsSuccess(true);
       setMessage("OTP Verified! Redirecting...");
       setTimeout(() => navigate("/reset-password", { state: { email } }), 800);
@@ -36,7 +37,7 @@ const VerifyOtp = () => {
     setMessage("");
     setLoading(true);
     try {
-      await axios.post("http://127.0.0.1:8000/api/admin-send-otp/", { email });
+      await axios.post(`${API_BASE_URL}/api/admin-send-otp/`, { email });
       setIsSuccess(true);
       setMessage("New OTP sent to your email.");
     } catch (error) {

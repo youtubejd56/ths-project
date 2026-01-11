@@ -2,7 +2,9 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const API_URL = "http://127.0.0.1:8000/api/attendance/";
+import API_BASE_URL from "../api/config";
+
+const API_URL = `${API_BASE_URL}/api/attendance/`;
 
 const AttendanceEntry = () => {
   const navigate = useNavigate();
@@ -142,9 +144,8 @@ const AttendanceEntry = () => {
                 <td className="p-2 border">{s.division}</td>
                 <td className="p-2 border">
                   <span
-                    className={`px-2 py-1 rounded text-white text-xs ${
-                      s.status === "Present" ? "bg-green-500" : "bg-red-500"
-                    }`}
+                    className={`px-2 py-1 rounded text-white text-xs ${s.status === "Present" ? "bg-green-500" : "bg-red-500"
+                      }`}
                   >
                     {s.status}
                   </span>

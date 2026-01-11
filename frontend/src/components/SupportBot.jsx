@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Send, Bot, X } from "lucide-react";
 import "../index.css"
 import axios from "axios";
+import API_BASE_URL from "../api/config";
 
 const SupportBot = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,7 +23,7 @@ const SupportBot = () => {
   // ✅ Predefined answers (keys are lowercase)
   const predefinedAnswers = {
     "who developed this website": "👨‍💻 This website was developed by Vinayak NV.",
-    "who made this website": "👨‍💻 This website was developed by Vinayak NV.", 
+    "who made this website": "👨‍💻 This website was developed by Vinayak NV.",
     "who created this website": "👨‍💻 This website was developed by Vinayak NV.",
     "who developed ai chatbot":
       "🤖 The AI chatbot was created and integrated by Vinayak NV.",
@@ -62,7 +63,7 @@ const SupportBot = () => {
 
     try {
       // Otherwise, call AI backend (Django/OpenAI)
-      const res = await axios.post("http://127.0.0.1:8000/api/ai-chat/", {
+      const res = await axios.post(`${API_BASE_URL}/api/ai-chat/`, {
         message: trimmedInput,
       });
 
@@ -148,16 +149,14 @@ const SupportBot = () => {
                   initial={{ opacity: 0, x: msg.role === "user" ? 50 : -50 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.3 }}
-                  className={`flex ${
-                    msg.role === "user" ? "justify-end" : "justify-start"
-                  }`}
+                  className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"
+                    }`}
                 >
                   <div
-                    className={`px-4 py-2 rounded-2xl max-w-[75%] shadow ${
-                      msg.role === "user"
-                        ? "bg-blue-500 text-white rounded-br-none"
-                        : "bg-green-200 text-gray-900 rounded-bl-none"
-                    }`}
+                    className={`px-4 py-2 rounded-2xl max-w-[75%] shadow ${msg.role === "user"
+                      ? "bg-blue-500 text-white rounded-br-none"
+                      : "bg-green-200 text-gray-900 rounded-bl-none"
+                      }`}
                   >
                     {/* render HTML only for trusted bot messages */}
                     {msg.role === "bot" && msg.isHtml ? (

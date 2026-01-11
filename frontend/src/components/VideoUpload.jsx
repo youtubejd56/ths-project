@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const API_URL = "http://127.0.0.1:8000/api/shorts/";
+import API_BASE_URL from "../api/config";
+
+const API_URL = `${API_BASE_URL}/api/shorts/`;
 
 const VideoUpload = () => {
   const [videos, setVideos] = useState([]);
@@ -71,7 +73,7 @@ const VideoUpload = () => {
                   src={
                     video.video.startsWith("http")
                       ? video.video
-                      : `http://127.0.0.1:8000${video.video}`
+                      : `${API_BASE_URL}${video.video}`
                   }
                   controls
                   className="rounded-lg w-full max-h-60 object-cover"
