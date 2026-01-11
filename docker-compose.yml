@@ -1,0 +1,36 @@
+version: "3.8"
+services:
+  backend:
+    # adjust build/context or image to match your backend
+    build:
+      context: ./backend
+    ports:
+      - "8000:8000"
+    # ensure backend listens on 0.0.0.0 inside container
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    environment:
+      - BACKEND_HOST=backend
+      - BACKEND_PORT=8080
+
+  postgres:
+    image: postgres:15
+    container_name: db
+    environment:
+      POSTGRES_DB: thsdb
+      POSTGRES_USER: thsuser
+      POSTGRES_PASSWORD: thspass
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
