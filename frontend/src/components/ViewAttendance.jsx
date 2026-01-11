@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 
-const API_URL = "http://127.0.0.1:8000/api/attendance/";
+const API_URL = "https://ths-backend-pvu4.onrender.com";
 
 const ViewAttendance = () => {
   const [records, setRecords] = useState([]);
@@ -210,9 +210,8 @@ const ViewAttendance = () => {
               <td className="border px-3 py-2">{rec.student_name}</td>
               <td className="border px-3 py-2">
                 <span
-                  className={`px-2 py-1 rounded text-white ${
-                    rec.status === "Present" ? "bg-green-500" : "bg-red-500"
-                  }`}
+                  className={`px-2 py-1 rounded text-white ${rec.status === "Present" ? "bg-green-500" : "bg-red-500"
+                    }`}
                 >
                   {rec.status}
                 </span>

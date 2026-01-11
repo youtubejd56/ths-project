@@ -25,6 +25,14 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
 ]
 
+INSTALLED_APPS += ["corsheaders"]
+
+MIDDLEWARE = ["corsheaders.middleware.CorsMiddleware"] + MIDDLEWARE
+
+CORS_ALLOWED_ORIGINS = [
+    "https://ths-frontend-p8v4.onrender.com",
+]
+
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
