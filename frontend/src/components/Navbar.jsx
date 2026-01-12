@@ -95,14 +95,14 @@ const Navbar = () => {
 
       {/* Background Overlay - Mobile Only */}
       <div
-        className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden transition-all duration-500 ${openMenu ? 'opacity-100 visible' : 'opacity-0 invisible'
+        className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-[90] md:hidden transition-all duration-500 ${openMenu ? 'opacity-100 visible' : 'opacity-0 invisible'
           }`}
         onClick={() => setOpenMenu(false)}
       />
 
       {/* Animated Mobile Menu - Glassmorphism Style */}
       <div
-        className={`fixed top-0 right-0 w-80 h-full bg-white/10 backdrop-blur-2xl shadow-2xl transform transition-all duration-700 ease-out z-50 md:hidden border-l border-white/20 ${openMenu ? 'translate-x-0' : 'translate-x-full'
+        className={`fixed top-0 right-0 w-[85%] max-w-[320px] h-full bg-[#083344]/98 backdrop-blur-2xl shadow-2xl transform transition-all duration-700 ease-out z-[100] md:hidden border-l border-white/10 flex flex-col ${openMenu ? 'translate-x-0' : 'translate-x-full'
           }`}
       >
         {/* Animated background effects - Glass orbs */}
@@ -130,22 +130,22 @@ const Navbar = () => {
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/30 to-blue-500/30 rounded-full blur-xl animate-pulse"></div>
               <img
-                className="relative w-20 h-20 rounded-full shadow-2xl ring-4 ring-white/40 backdrop-blur-sm"
+                className="relative w-16 h-16 rounded-full shadow-2xl ring-4 ring-white/40 backdrop-blur-sm"
                 src={Logo}
                 alt="logo"
               />
             </div>
             <div className="text-center">
-              <h2 className="font-black text-white text-2xl drop-shadow-lg">
+              <h2 className="font-black text-white text-xl drop-shadow-lg">
                 GOVT.THS.PALA
               </h2>
-              <p className="text-cyan-200 text-sm font-semibold mt-1">Technical High School</p>
+              <p className="text-cyan-200 text-xs font-semibold mt-0.5">Technical High School</p>
             </div>
           </div>
         </div>
 
-        {/* Mobile Navigation Links */}
-        <nav className="relative mt-8 px-6">
+        {/* Mobile Navigation Links - Scrollable area */}
+        <nav className="flex-1 overflow-y-auto relative mt-4 px-6 pb-24 scrollbar-hide">
           <ul className="space-y-3">
             {navItems.map((item, idx) => {
               const Icon = item.icon;
@@ -162,9 +162,9 @@ const Navbar = () => {
                   <NavLink
                     to={item.path}
                     onClick={() => setOpenMenu(false)}
-                    className={({ isActive }) => `group relative flex items-center gap-4 px-6 py-4 rounded-2xl transition-all duration-300 overflow-hidden border ${isActive
-                      ? 'bg-white/30 backdrop-blur-xl text-white shadow-2xl scale-105 border-white/40'
-                      : 'bg-white/10 backdrop-blur-md text-white/90 hover:bg-white/20 hover:scale-105 shadow-lg border-white/20'
+                    className={({ isActive }) => `group relative flex items-center gap-3 px-5 py-3.5 rounded-2xl transition-all duration-300 overflow-hidden border ${isActive
+                      ? 'bg-white/20 backdrop-blur-xl text-white shadow-xl scale-102 border-white/30'
+                      : 'bg-white/5 backdrop-blur-md text-white/80 hover:bg-white/10 shadow-lg border-white/10'
                       }`}
                   >
                     {({ isActive }) => (
@@ -174,10 +174,10 @@ const Navbar = () => {
                           ? 'bg-gradient-to-br from-cyan-400/40 to-blue-500/40 shadow-lg'
                           : 'bg-white/20 group-hover:bg-white/30'
                           }`}>
-                          <Icon className="w-6 h-6 text-white" />
+                          <Icon className="w-5 h-5 text-white" />
                         </div>
 
-                        <span className="font-bold text-lg flex-1">{item.label}</span>
+                        <span className="font-bold text-base flex-1">{item.label}</span>
 
                         <svg
                           className={`w-6 h-6 transition-all duration-300 ${isActive
@@ -211,9 +211,9 @@ const Navbar = () => {
           <div className="absolute top-1/2 right-20 w-16 h-16 border-2 border-purple-300/20 rounded-full backdrop-blur-sm" style={{ animation: 'ping 5s cubic-bezier(0, 0, 0.2, 1) infinite', animationDelay: '2s' }}></div>
         </div>
 
-        {/* Footer info in mobile menu */}
-        <div className="absolute bottom-6 left-6 right-6">
-          <div className="bg-white/15 backdrop-blur-xl rounded-2xl p-5 border border-white/30 shadow-2xl">
+        {/* Footer info in mobile menu - Fixed at bottom of the menu container */}
+        <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-[#164e63] to-transparent">
+          <div className="bg-white/15 backdrop-blur-xl rounded-2xl p-4 border border-white/30 shadow-2xl">
             <p className="text-white text-sm text-center font-semibold">
               © 2025 GOVT.THS.PALA
             </p>

@@ -98,7 +98,7 @@ const AdminLogin = () => {
               <div className={`absolute inset-0 ${isDark ? 'bg-gradient-to-t from-purple-900/80 to-transparent' : 'bg-gradient-to-t from-purple-100/50 to-transparent'}`}></div>
             </div> */}
 
-            <div className="text-center space-y-4">
+            <div className="text-center space-y-4 hidden md:block">
               <h1 className={`text-5xl font-black bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent ${isDark ? 'animate-pulse' : ''}`}>
                 Welcome Back
               </h1>

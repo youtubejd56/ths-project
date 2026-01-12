@@ -101,10 +101,8 @@ class Student(models.Model):
 
     def __str__(self):
         return f"{self.student_name} ({self.year} - {self.division})"
-    
 
-
-# -------------------- email--------------------
+# -------------------- email --------------------
 class EmailOTP(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     otp = models.CharField(max_length=6)
@@ -115,3 +113,12 @@ class EmailOTP(models.Model):
         from django.utils import timezone
         from datetime import timedelta
         return timezone.now() > self.created_at + timedelta(minutes=10)
+
+# -------------------- Support Message --------------------
+class SupportMessage(models.Model):
+    user_query = models.TextField()
+    bot_response = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Query at {self.created_at}"

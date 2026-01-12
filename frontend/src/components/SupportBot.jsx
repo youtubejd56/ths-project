@@ -33,7 +33,6 @@ const SupportBot = () => {
     "contact developer":
       '📞 <a href="tel:8075631073">8075631073</a> <br/> 🌐 <a href="https://youtubejd56.github.io/vinayak-portfolio/" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline">Portfolio Link</a>',
   };
-
   const handleSend = async () => {
     const trimmedInput = input.trim();
     if (!trimmedInput) return;
@@ -96,7 +95,7 @@ const SupportBot = () => {
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ type: "spring", stiffness: 200, damping: 10 }}
-          className="fixed bottom-6 right-6 p-4 rounded-full shadow-xl relative"
+          className="fixed bottom-6 right-6 p-4 rounded-full shadow-xl relative z-40"
         >
           <span className="absolute inset-0 rounded-full animate-pulse-rgb"></span>
           <motion.span
@@ -125,7 +124,7 @@ const SupportBot = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 50, scale: 0.9 }}
             transition={{ duration: 0.3 }}
-            className="fixed bottom-6 right-6 w-80 sm:w-96 h-[450px] bg-white shadow-2xl rounded-2xl overflow-hidden flex flex-col border border-gray-200"
+            className="fixed bottom-6 right-6 w-80 sm:w-96 h-[450px] bg-white shadow-2xl rounded-2xl overflow-hidden flex flex-col border border-gray-200 z-50"
           >
             {/* Header */}
             <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white px-4 py-3 flex items-center justify-between">

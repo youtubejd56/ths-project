@@ -17,7 +17,7 @@ import random
 from django.core.mail import send_mail
 from .models import EmailOTP
 
-from .models import Attendance, StudentMark, EventPost, Admission, Shorts
+from .models import Attendance, StudentMark, EventPost, Admission, Shorts, SupportMessage
 from .serializers import (
     AttendanceSerializer,
     StudentMarkSerializer,
@@ -280,6 +280,9 @@ def ai_chat(request):
         )
 
         reply = response.choices[0].message.content
+
+        # Save to database
+        SupportMessage.objects.create(user_query=user_msg, bot_response=reply)
 
         return JsonResponse({"reply": reply})
 

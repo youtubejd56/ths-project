@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import API_BASE_URL from "../api/config";
+import * as XLSX from "xlsx";
 
 const SUBJECTS = [
   "maths",
@@ -18,7 +20,7 @@ const SUBJECTS = [
 
 const DIVISIONS = ["10A", "10B", "9A", "9B", "8A", "8B"];
 const EXAM_TYPES = ["First Term", "Second Term", "Annual Exam"]; // ✅ new
-const BASE_URL = "http://localhost:8000/api";
+const BASE_URL = `${API_BASE_URL}/api`;
 
 export default function MarkList() {
   const [selectedDivision, setSelectedDivision] = useState(DIVISIONS[0]);
@@ -151,11 +153,10 @@ export default function MarkList() {
         {DIVISIONS.map((div) => (
           <button
             key={div}
-            className={`flex justify-between w-full px-2 py-2 mb-1.5 rounded-md cursor-pointer ${
-              selectedDivision === div
+            className={`flex justify-between w-full px-2 py-2 mb-1.5 rounded-md cursor-pointer ${selectedDivision === div
                 ? "bg-blue-600 text-white"
                 : "bg-gray-200 text-black"
-            }`}
+              }`}
             onClick={() => setSelectedDivision(div)}
           >
             <span>{div}</span>
@@ -168,11 +169,10 @@ export default function MarkList() {
         {EXAM_TYPES.map((exam) => (
           <button
             key={exam}
-            className={`w-full px-2 py-2 mb-1 rounded-md cursor-pointer ${
-              selectedExam === exam
+            className={`w-full px-2 py-2 mb-1 rounded-md cursor-pointer ${selectedExam === exam
                 ? "bg-green-600 text-white"
                 : "bg-gray-200 text-black"
-            }`}
+              }`}
             onClick={() => setSelectedExam(exam)}
           >
             {exam}
@@ -309,9 +309,8 @@ export default function MarkList() {
                   {(savedMarks[key] || []).map((item, i) => (
                     <tr
                       key={i}
-                      className={`border-b hover:bg-gray-50 ${
-                        i % 2 === 0 ? "bg-white" : "bg-gray-50"
-                      }`}
+                      className={`border-b hover:bg-gray-50 ${i % 2 === 0 ? "bg-white" : "bg-gray-50"
+                        }`}
                     >
                       <td className="px-4 py-2">{i + 1}</td>
                       <td className="px-4 py-2">{item.roll_no}</td>

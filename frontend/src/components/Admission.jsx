@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { User, Phone, MapPin, ArrowLeft, Send } from 'lucide-react';
+import { useNavigate } from "react-router-dom";
+import API_BASE_URL from "../api/config";
+import axios from "axios";
+import { User, Phone, MapPin, Send, School, Sparkles, CheckCircle2, ChevronRight, GraduationCap, ArrowLeft } from 'lucide-react';
 
 const Admission = () => {
   const navigate = useNavigate();
@@ -10,6 +11,8 @@ const Admission = () => {
     student_name: '',
     address: '',
   });
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const handleChange = (e) => {
     setFormData(prev => ({
@@ -20,9 +23,12 @@ const Admission = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setSuccess(false); // Reset success state on new submission attempt
 
     try {
-      const response = await axios.post('http://localhost:8000/api/admission/', formData);
+      const response = await axios.post(`${API_BASE_URL}/api/admission/`, formData);
+      setSuccess(true);
       alert('Submitted Successfully!');
       console.log(response.data);
 

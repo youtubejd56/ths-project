@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import EventPost, Admission, StudentMark, Attendance, Shorts
+from .models import EventPost, Admission, StudentMark, Attendance, Shorts, SupportMessage
 
 class EventPostSerializer(serializers.ModelSerializer):
     class Meta:
@@ -25,3 +25,8 @@ class ShortsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Shorts
         fields = ['id', 'title', 'caption', 'video', 'created_at']
+
+class SupportMessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SupportMessage
+        fields = '__all__'
