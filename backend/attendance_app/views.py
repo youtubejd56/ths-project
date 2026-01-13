@@ -10,14 +10,12 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.http import JsonResponse
 from django.db.models import Count, Q
+from django.utils import timezone
 from datetime import date, timedelta
-
 import calendar
 import random
-from django.core.mail import send_mail
-from .models import EmailOTP
 
-from .models import Attendance, StudentMark, EventPost, Admission, Shorts, SupportMessage
+from .models import Attendance, StudentMark, EventPost, Admission, Shorts, SupportMessage, EmailOTP
 from .serializers import (
     AttendanceSerializer,
     StudentMarkSerializer,
@@ -141,18 +139,23 @@ def save_attendance(request):
     division = request.data.get("division")
     students = request.data.get("students", [])
 
+    from django.db import transaction
     if not date_val or not division or not students:
         return Response({"error": "Missing fields"}, status=status.HTTP_400_BAD_REQUEST)
 
-    for student in students:
-        Attendance.objects.create(
-            date=date_val,
-            division=division,
-            student_name=student["student_name"],
-            status=student["status"],
-            roll_number=student.get("roll_number"),
-            year=student.get("year")
-        )
+    try:
+        with transaction.atomic():
+            for student in students:
+                Attendance.objects.create(
+                    date=date_val,
+                    division=division,
+                    student_name=student["student_name"],
+                    status=student["status"],
+                    roll_number=student.get("roll_number"),
+                    year=student.get("year")
+                )
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     return Response({"message": f"Attendance saved for {division} on {date_val}"}, status=status.HTTP_201_CREATED)
 
 
@@ -218,7 +221,8 @@ def admin_forgot_password(request):
     except User.DoesNotExist:
         return Response({"error": "No admin found with this email"}, status=404)
 
-    reset_link = f"http://localhost:3000/reset-password/{user.id}/"
+    frontend_url = os.getenv("FRONTEND_URL", "https://ths-frontend-p8v4.onrender.com")
+    reset_link = f"{frontend_url}/reset-password/{user.id}/"
     send_mail(
         "Admin Password Reset",
         f"Click the link to reset your password: {reset_link}",
@@ -295,6 +299,31 @@ def ai_chat(request):
     
 
 # -------------------- Send OTP --------------------
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def send_otp(request):
+    email = request.data.get("email")
+    if not email:
+        return JsonResponse({"error": "Email is required"}, status=400)
+    try:
+        user = User.objects.get(email=email, is_staff=True)
+    except User.DoesNotExist:
+        return JsonResponse({"error": "No admin account found with this email"}, status=404)
+    otp = str(random.randint(100000, 999999))
+    EmailOTP.objects.create(user=user, otp=otp, verified=False)
+    try:
+        current_time = timezone.now().strftime("%H:%M:%S")
+        send_mail(
+            subject=f"Password Reset OTP - {current_time}",
+            message=f"Your OTP for password reset is: {otp}\n\nThis OTP will expire in 10 minutes.",
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[email],
+            fail_silently=False,
+        )
+        return JsonResponse({"message": "OTP sent to your email"}, status=200)
+    except Exception as e:
+        print(f"Email error: {e}")
+        return JsonResponse({"error": "Failed to send email. Please try again."}, status=500)
 
 
 

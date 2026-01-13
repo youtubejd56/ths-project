@@ -26,8 +26,8 @@ const Short = () => {
       setError("❌ Please upload a valid video file!");
       return;
     }
-    if (selectedFile.size > 30 * 1024 * 1024) {
-      setError("❌ File size must be less than 30MB!");
+    if (selectedFile.size > 10 * 1024 * 1024) {
+      setError("❌ File size must be less than 10MB!");
       return;
     }
 
@@ -81,9 +81,7 @@ const Short = () => {
 
     try {
       setLoading(true);
-      await axios.post(API_URL, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      await axios.post(API_URL, formData);
       alert("✅ Video uploaded successfully!");
       handleRemoveVideo();
       setTitle("");
@@ -133,7 +131,7 @@ const Short = () => {
               </p>
               <p className="text-sm text-gray-500 flex items-center gap-2">
                 <span className="inline-block w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                MP4, MOV • Max 30MB • Max 2 minutes
+                MP4, MOV • Max 10MB • Max 2 minutes
               </p>
 
               <input

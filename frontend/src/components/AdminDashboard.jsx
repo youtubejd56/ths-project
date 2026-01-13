@@ -1,6 +1,6 @@
 // AdminDashboard.jsx
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api/axiosInstance";
 import { FaUserCircle, FaSignOutAlt } from "react-icons/fa";
 import {
   BarChart,
@@ -15,61 +15,6 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import API_BASE_URL from "../api/config";
-
-const API_BASE = `${API_BASE_URL}/api`;
-
-// axios instance
-const api = axios.create({
-  baseURL: API_BASE,
-  timeout: 10000,
-});
-
-// attach access token before request
-api.interceptors.request.use(
-  (config) => {
-    const access = localStorage.getItem("access");
-    if (access) config.headers.Authorization = `Bearer ${access}`;
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
-
-// refresh token interceptor
-api.interceptors.response.use(
-  (resp) => resp,
-  async (error) => {
-    const originalRequest = error.config;
-    if (
-      error.response &&
-      error.response.status === 401 &&
-      !originalRequest._retry
-    ) {
-      originalRequest._retry = true;
-      const refresh = localStorage.getItem("refresh");
-      if (!refresh) {
-        toast.error("Session expired. Please log in again.");
-        localStorage.clear();
-        window.location.href = "/admin-login";
-        return Promise.reject(error);
-      }
-      try {
-        const r = await axios.post(`${API_BASE}/token/refresh/`, { refresh });
-        const newAccess = r.data.access;
-        localStorage.setItem("access", newAccess);
-        api.defaults.headers.common["Authorization"] = `Bearer ${newAccess}`;
-        originalRequest.headers["Authorization"] = `Bearer ${newAccess}`;
-        return api(originalRequest);
-      } catch (refreshError) {
-        toast.error("Login expired. Please log in again.");
-        localStorage.clear();
-        window.location.href = "/admin-login";
-        return Promise.reject(refreshError);
-      }
-    }
-    return Promise.reject(error);
-  }
-);
 
 const AdminDashboard = () => {
   const [adminData, setAdminData] = useState(null);

@@ -13,7 +13,7 @@ load_dotenv(BASE_DIR / ".env")
 # Security
 # -------------------------------------------------
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "insecure-dev-key")
-DEBUG = os.getenv("DJANGO_DEBUG", "True").lower() in ("1", "true", "yes")
+DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() in ("1", "true", "yes")
 
 # ALLOWED_HOSTS = (
 #     [h.strip() for h in os.getenv("ALLOWED_HOSTS", "").split(",") if h.strip()]
@@ -39,12 +39,12 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
+    "cloudinary_storage",
     "django.contrib.staticfiles",
 
     # Third-party
     "rest_framework",
     "rest_framework_simplejwt",
-    "cloudinary_storage",
     "cloudinary",
     "corsheaders",
 
@@ -136,6 +136,7 @@ else:
             default=os.getenv("DATABASE_URL"),
             conn_max_age=600,
             conn_health_checks=True,
+            ssl_require=True,
         )
     }
 
@@ -164,7 +165,11 @@ DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "kkvinayak716@gmail.com")
 # -------------------------------------------------
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+# Using default storage for collectstatic to avoid compression errors on Render
+# WhiteNoiseMiddleware will still handle serving and compression at runtime
+# STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+WHITENOISE_MANIFEST_STRICT = False
+WHITENOISE_USE_FINDERS = True
 
 # -------------------------------------------------
 # Media files
@@ -200,6 +205,9 @@ if not DEBUG:
     SECURE_HSTS_INCLUDE_SUBDOMAINS = os.getenv("SECURE_HSTS_INCLUDE_SUBDOMAINS", "True").lower() in ("1", "true", "yes")
     SECURE_HSTS_PRELOAD = os.getenv("SECURE_HSTS_PRELOAD", "True").lower() in ("1", "true", "yes")
 
+    # Important for Render's reverse proxy
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 # -------------------------------------------------
 # Default primary key
 # -------------------------------------------------
@@ -211,15 +219,32 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+            "style": "{",
+        },
+    },
     "handlers": {
-        "console": {"class": "logging.StreamHandler"},
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        },
     },
     "root": {
         "handlers": ["console"],
         "level": "INFO",
     },
     "loggers": {
-        "django.request": {"handlers": ["console"], "level": "INFO", "propagate": False},
-        "rest_framework": {"handlers": ["console"], "level": "INFO", "propagate": False},
+        "django": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "django.request": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+            "propagate": False,
+        },
     },
 }

@@ -8,9 +8,9 @@ WORKDIR /app
 
 # install native build deps needed by mysqlclient and other packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential pkg-config default-libmysqlclient-dev libpq-dev \
-    libffi-dev libssl-dev zlib1g-dev libjpeg-dev gcc \
-    rustc cargo \
+  build-essential pkg-config default-libmysqlclient-dev libpq-dev \
+  libffi-dev libssl-dev zlib1g-dev libjpeg-dev gcc \
+  rustc cargo \
   && rm -rf /var/lib/apt/lists/*
 
 # ensure pip/setuptools/wheel are recent
@@ -25,5 +25,8 @@ ENV PYTHONPATH=/app
 
 EXPOSE 8000
 
-CMD ["gunicorn", "school_backend.wsgi:application", "--bind", "0.0.0.0:8000"]
+# Run collectstatic during build. Use a dummy secret key.
+RUN DJANGO_SECRET_KEY=dummy-key-for-collectstatic python manage.py collectstatic --noinput || true
+
+CMD python create_admin.py && python manage.py migrate && gunicorn school_backend.wsgi:application --bind 0.0.0.0:${PORT:-8000}
 # ...existing code...

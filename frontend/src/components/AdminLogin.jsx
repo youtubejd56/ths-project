@@ -22,7 +22,7 @@ const AdminLogin = () => {
         { username: u, password: p },
         { withCredentials: true }
       );
-      localStorage.setItem("access", response.data.access);
+      localStorage.setItem("token", response.data.access);
       localStorage.setItem("refresh", response.data.refresh);
       alert("Admin Login Successful!");
       navigate("/admin-dashboard");

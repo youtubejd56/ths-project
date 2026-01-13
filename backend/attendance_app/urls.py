@@ -6,9 +6,9 @@ from .views import (
     clear_division_marks, clear_all_marks,
     EventPostViewSet, AdmissionView, AdmissionListView,
     save_attendance, get_attendance,
-    AdminLoginView, AdminDashboardView
+    AdminLoginView, AdminDashboardView,
+    send_otp, verify_otp, reset_password
 )
-from email_otp.views import send_otp, verify_otp, reset_password
 
 # -------------------- Routers --------------------
 router = DefaultRouter()

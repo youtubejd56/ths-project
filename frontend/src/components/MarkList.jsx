@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import API_BASE_URL from "../api/config";
+import api from "../api/axiosInstance";
 import * as XLSX from "xlsx";
 
 const SUBJECTS = [
@@ -34,8 +33,8 @@ export default function MarkList() {
 
   // Fetch marks for selected division + exam + year
   const fetchDivisionMarks = (division, year, exam) => {
-    axios
-      .get(`${BASE_URL}/marks/?division=${division}&year=${year}&exam=${exam}`)
+    api
+      .get(`/marks/?division=${division}&year=${year}&exam=${exam}`)
       .then((res) => {
         const sortedData = res.data.sort(
           (a, b) => parseInt(a.roll_no) - parseInt(b.roll_no)
@@ -82,8 +81,8 @@ export default function MarkList() {
       ...marks,
     };
 
-    axios
-      .post(`${BASE_URL}/marks/`, payload)
+    api
+      .post(`/marks/`, payload)
       .then(() => {
         fetchDivisionMarks(selectedDivision, year, selectedExam);
         setRollNo("");
@@ -103,9 +102,9 @@ export default function MarkList() {
         `Are you sure you want to clear all marks for ${selectedDivision} (${selectedExam}, ${year})?`
       )
     ) {
-      axios
+      api
         .delete(
-          `${BASE_URL}/marks/clear_division/${selectedDivision}/?year=${year}&exam=${selectedExam}`
+          `/marks/clear_division/${selectedDivision}/?year=${year}&exam=${selectedExam}`
         )
         .then(() => {
           setSavedMarks((prev) => ({
@@ -125,8 +124,8 @@ export default function MarkList() {
     if (
       window.confirm("Are you sure you want to clear ALL marks for all divisions?")
     ) {
-      axios
-        .delete(`${BASE_URL}/marks/clear_all/`)
+      api
+        .delete(`/marks/clear_all/`)
         .then(() => setSavedMarks({}))
         .catch((err) => {
           console.error("Failed to clear all marks", err);
@@ -154,8 +153,8 @@ export default function MarkList() {
           <button
             key={div}
             className={`flex justify-between w-full px-2 py-2 mb-1.5 rounded-md cursor-pointer ${selectedDivision === div
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200 text-black"
+              ? "bg-blue-600 text-white"
+              : "bg-gray-200 text-black"
               }`}
             onClick={() => setSelectedDivision(div)}
           >
@@ -170,8 +169,8 @@ export default function MarkList() {
           <button
             key={exam}
             className={`w-full px-2 py-2 mb-1 rounded-md cursor-pointer ${selectedExam === exam
-                ? "bg-green-600 text-white"
-                : "bg-gray-200 text-black"
+              ? "bg-green-600 text-white"
+              : "bg-gray-200 text-black"
               }`}
             onClick={() => setSelectedExam(exam)}
           >

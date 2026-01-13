@@ -1,12 +1,8 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
-
-import API_BASE_URL from "../api/config";
-
-const API_URL = `${API_BASE_URL}/api/attendance/`;
 
 const ViewAttendance = () => {
   const [records, setRecords] = useState([]);
@@ -19,7 +15,7 @@ const ViewAttendance = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get(API_URL).then((res) => {
+    api.get("/attendance/").then((res) => {
       const uniqueMap = new Map();
 
       res.data.forEach((rec) => {

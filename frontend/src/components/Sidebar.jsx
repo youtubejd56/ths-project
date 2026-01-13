@@ -26,7 +26,7 @@ const Sidebar = () => {
           </Link>
           <Link to="/admin-dashboard/attendance" className="flex items-center gap-3 hover:text-yellow-400 transition">
             <FaClipboardList /> Attendance
-          `</Link>
+          </Link>
 
           <Link to="/admin-dashboard/admissiondata" className="flex items-center gap-3 hover:text-yellow-400 transition">
             <FaDivide /> Admission Data

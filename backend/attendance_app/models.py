@@ -1,11 +1,29 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
+from cloudinary_storage.storage import VideoMediaCloudinaryStorage
 
 def validate_file_type(value):
-    valid_mime_types = ['image/jpeg', 'image/png', 'application/pdf']
-    if value.content_type not in valid_mime_types:
-        raise ValidationError('Unsupported file type. Allowed: JPG, PNG, PDF.')
+    if not value:
+        return
+    
+    if value.size > 10 * 1024 * 1024:
+        raise ValidationError('File size too large. Maximum size is 10MB.')
+
+    # Get the content type from the file object
+    content_type = getattr(value, 'content_type', None)
+    
+    # If content_type is missing (some storage backends or test environments), 
+    # we might skip validation or handle it differently.
+    # For robust production, we should check it if available.
+    if content_type:
+        valid_mime_types = [
+            'image/jpeg', 'image/png', 'image/gif', 'image/webp',
+            'application/pdf',
+            'video/mp4', 'video/mpeg', 'video/ogg', 'video/webm', 'video/quicktime'
+        ]
+        if content_type not in valid_mime_types:
+            raise ValidationError(f'Unsupported file type: {content_type}. Allowed: JPG, PNG, WEBP, PDF, and Videos.')
 
 # -------------------- Event Post --------------------
 class EventPost(models.Model):
@@ -84,7 +102,11 @@ class Attendance(models.Model):
 class Shorts(models.Model):
     title = models.CharField(max_length=255)
     caption = models.TextField()
-    video = models.FileField(upload_to='shorts/')
+    video = models.FileField(
+        upload_to='shorts/',
+        validators=[validate_file_type],
+        storage=VideoMediaCloudinaryStorage()
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

@@ -1,10 +1,6 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
-import API_BASE_URL from "../api/config";
-
-const API_URL = `${API_BASE_URL}/api/attendance/`;
+import api from "../api/axiosInstance";
 
 const AttendanceEntry = () => {
   const navigate = useNavigate();
@@ -44,18 +40,13 @@ const AttendanceEntry = () => {
     if (entries.length === 0) return alert("No students added!");
 
     try {
-      for (const student of entries) {
-        await axios.post(API_URL, {
-          date: student.date,
-          division: student.division,
-          year: student.year,
-          roll_number: student.roll_number,
-          student_name: student.student_name,
-          status: student.status,
-        });
-      }
+      await api.post("/attendance/save/", {
+        date: todayDate,
+        division: selectedDivision,
+        students: entries,
+      });
       alert(`✅ Attendance for ${selectedDivision} saved!`);
-      localStorage.removeItem("attendanceEntries"); // Clear local after save
+      localStorage.removeItem("attendanceEntries");
       setEntries([]);
     } catch (err) {
       console.error(err);
