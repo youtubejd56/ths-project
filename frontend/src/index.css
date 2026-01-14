@@ -1,15 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Bellefair&family=Fira+Code:wght@300..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Italianno&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Modern+Antiqua&display=swap');
 @import "tailwindcss";
 
-.wrapper {
+/* .wrapper {
   box-shadow: 0px -10px 20px 0px rgba(49, 49, 49, 0.479);
-}
+} */
 
 
 /*pagination*/
 #app {
   height: 100%;
 }
+
 html,
 body {
   position: relative;
@@ -18,8 +19,7 @@ body {
 
 body {
   font-family:
-    Helvetica Neue,z
-    Helvetica,
+    Helvetica Neue, z Helvetica,
     Arial,
     sans-serif;
   font-size: 14px;
@@ -82,28 +82,59 @@ body {
 
 
 
- .animate-pulse-rgb {
-          background: conic-gradient(
-            from 0deg,
-            #ff0000,
-            #ff7300,
-            #fffb00,
-            #48ff00,
-            #00ffd5,
-            #002bff,
-            #7a00ff,
-            #ff00ab,
-            #ff0000
-          );
-          animation: rotate 4s linear infinite;
-          filter: blur(6px);
-          opacity: 0.8;
-        }
-        @keyframes rotate {
-          0% {
-            transform: rotate(0deg);
-          }
-          100% {
-            transform: rotate(360deg);
-          }
-        }
+.animate-pulse-rgb {
+  background: conic-gradient(from 0deg,
+      #ff0000,
+      #ff7300,
+      #fffb00,
+      #48ff00,
+      #00ffd5,
+      #002bff,
+      #7a00ff,
+      #ff00ab,
+      #ff0000);
+  animation: rotate 4s linear infinite;
+  filter: blur(6px);
+  opacity: 0.8;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes glass-ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+
+  50% {
+    transform: scale(1.25);
+    opacity: 0.3;
+  }
+
+  100% {
+    transform: scale(1.45);
+    opacity: 0;
+  }
+}
+
+@keyframes glass-float {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-18px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}

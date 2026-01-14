@@ -15,7 +15,7 @@ import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 
 import '../index.css';
 
-// ✅ Import Chatbot
+// Chatbot
 import SupportBot from "../components/SupportBot";
 
 const Hero = () => {
@@ -23,25 +23,43 @@ const Hero = () => {
   const progressContent = useRef(null);
   const [showBot, setShowBot] = useState(true);
 
-  // ✅ Optimized Scroll detection for Chatbot visibility
+  // ⭐ Improved Chatbot Behavior
   useEffect(() => {
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     let lastScrollY = window.scrollY;
 
     const handleScroll = () => {
+      if (isMobile) return; // mobile = no scroll hide
+
       const currentScrollY = window.scrollY;
 
-      if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        // Scrolling down + past header → Hide bot
+      if (currentScrollY > lastScrollY && currentScrollY > 120) {
         setShowBot(false);
       } else {
-        // Scrolling up or at top → Show bot
         setShowBot(true);
       }
+
       lastScrollY = currentScrollY;
     };
 
+    const handleKeyboard = () => {
+      if (isMobile) {
+        const heightRatio = window.innerHeight / window.outerHeight;
+        if (heightRatio < 0.75) {
+          setShowBot(false);
+        } else {
+          setShowBot(true);
+        }
+      }
+    };
+
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("resize", handleKeyboard);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleKeyboard);
+    };
   }, []);
 
   const onAutoplayTimeLeft = (s, time, progress) => {
@@ -63,13 +81,8 @@ const Hero = () => {
           <Swiper
             spaceBetween={30}
             centeredSlides={true}
-            autoplay={{
-              delay: 4000,
-              disableOnInteraction: false,
-            }}
-            pagination={{
-              clickable: true,
-            }}
+            autoplay={{ delay: 4000, disableOnInteraction: false }}
+            pagination={{ clickable: true }}
             navigation={true}
             modules={[Autoplay, Pagination, Navigation]}
             onAutoplayTimeLeft={onAutoplayTimeLeft}
@@ -89,18 +102,17 @@ const Hero = () => {
             </div>
           </Swiper>
         </div>
-        {/* Backdrop blur bar */}
         <div className="wrapper w-full h-8 bg-gray-400/20 bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 absolute -bottom-12" />
       </div>
 
-
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-        {/* Hero Section with Malayalam Introduction */}
+        {/* Malayalam Hero Section */}
         <div className="relative overflow-hidden bg-gradient-to-r from-indigo-900 via-purple-900 to-indigo-800">
           <div className="absolute inset-0 bg-black/20"></div>
+
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
             <div className="text-center mb-8">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 drop-shadow-lg">
+              <h1 className="text-2xl md:text-5xl lg:text-6xl font-bold text-white mb-4 drop-shadow-lg">
                 Government Technical High School
               </h1>
               <p className="text-xl md:text-2xl text-indigo-200 font-semibold">Pala, Kottayam</p>
@@ -111,7 +123,10 @@ const Hero = () => {
             </div>
 
             <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-white/20">
-              <p className="text-lg leading-relaxed text-white/90 text-justify font-noto">
+              <p
+                className="text-sm md:text-lg text-white/90 text-justify font-noto"
+                style={{ lineHeight: "2.0", letterSpacing: "0.2px", wordSpacing: "2px" }}
+              >
                 കോട്ടയം ജില്ലയ്ക്കാകെ അഭിമാനം പകരുന്ന സാങ്കേതിക വിദ്യാഭ്യാസ സ്ഥാപനമായ ഗവൺമെൻറ് ടെക്നിക്കൽ ഹൈസ്കൂൾ പാലാ 1961-ലാണ് സ്ഥാപിതമായത്. മീനച്ചിലാറിന്റെ തീരത്ത് മുത്തോലി ഗ്രാമപഞ്ചായത്ത് അഞ്ചാം വാർഡിൽ ആരെയും ആകർഷിക്കുന്ന രീതിയിൽ പൂഞ്ഞാർ ഏറ്റുമാനൂർ സ്റ്റേറ്റ് ഹൈവേയ്ക്ക് സമീപം തലയുയർത്തി നിൽക്കുന്ന വിദ്യാലയമാണ് Govt. THS, Pala. പ്രകൃതിരമണീയത തുളുമ്പി നിൽക്കുന്ന വിശാലമായ ക്യാമ്പസ് ആണ് ഈ സ്കൂളിൽ ഉള്ളത്.
               </p>
             </div>
@@ -124,17 +139,14 @@ const Hero = () => {
             <video
               className="w-full h-[400px] md:h-[500px] lg:h-[600px] object-cover"
               src="/videos/intro.mp4"
-              autoPlay
-              muted
-              loop
-              controls
+              autoPlay muted loop controls
             >
               Your browser does not support the video tag.
             </video>
           </div>
         </div>
 
-        {/* About Section */}
+        {/* About */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-4">
@@ -168,12 +180,12 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* Extracurricular Activities */}
+        {/* Extracurricular */}
         <div className="bg-gradient-to-r from-indigo-600 to-purple-600 py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-4 mb-8">
               <Cpu className="w-10 h-10 text-white" />
-              <h2 className="text-3xl md:text-4xl font-bold text-white">Extracurricular Activities</h2>
+              <h2 className="text-2xl md:text-4xl font-bold text-white">Extracurricular Activities</h2>
             </div>
 
             <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 md:p-12 border border-white/20">
@@ -188,7 +200,7 @@ const Hero = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="flex items-center gap-4 mb-8">
             <BookOpen className="w-10 h-10 text-indigo-600" />
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-800">Physical Facilities</h2>
+            <h2 className="text-2xl md:text-4xl font-bold text-gray-800">Physical Facilities</h2>
           </div>
 
           <div className="bg-white rounded-3xl shadow-xl p-8 md:p-12 border border-gray-100">
@@ -218,7 +230,7 @@ const Hero = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-4 mb-8">
               <MapPin className="w-10 h-10 text-indigo-600" />
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-800">Visit Us</h2>
+              <h2 className="text-2xl md:text-4xl font-bold text-gray-800">Visit Us</h2>
             </div>
 
             <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
@@ -249,12 +261,6 @@ const Hero = () => {
           </div>
         )}
       </div>
-      {/* <footer className="bg-gradient-to-r from-indigo-900 via-purple-900 to-indigo-800 text-white py-5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-lg">© 2026 Government Technical High School, Pala</p>
-          <p className="text-indigo-200 mt-2">Excellence in Technical Education since 1961</p>
-        </div>
-      </footer> */}
     </>
   );
 };

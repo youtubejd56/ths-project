@@ -158,34 +158,40 @@ function App() {
         <Route
           path="/admin-dashboard"
           element={
-            <div className="flex">
-              <Sidebar />
-              <div className="ml-64 w-full bg-gray-100 min-h-screen p-6">
-                <AdminDashboard />
+            <ProtectedRoute>
+              <div className="flex">
+                <Sidebar />
+                <div className="ml-64 w-full bg-gray-100 min-h-screen p-6">
+                  <AdminDashboard />
+                </div>
               </div>
-            </div>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/admin-dashboard/marklist"
           element={
-            <div className="flex">
-              <Sidebar />
-              <div className="ml-64 w-full bg-gray-100 min-h-screen p-6">
-                <MarkList />
+            <ProtectedRoute>
+              <div className="flex">
+                <Sidebar />
+                <div className="ml-64 w-full bg-gray-100 min-h-screen p-6">
+                  <MarkList />
+                </div>
               </div>
-            </div>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/admin-dashboard/admissiondata"
           element={
-            <div className="flex">
-              <Sidebar />
-              <div className="ml-64 w-full bg-gray-100 min-h-screen p-6">
-                <AdmissionData />
+            <ProtectedRoute>
+              <div className="flex">
+                <Sidebar />
+                <div className="ml-64 w-full bg-gray-100 min-h-screen p-6">
+                  <AdmissionData />
+                </div>
               </div>
-            </div>
+            </ProtectedRoute>
           }
         />
         <Route
@@ -202,34 +208,40 @@ function App() {
         <Route
           path="/admin-dashboard/attendance"
           element={
-            <div className="flex">
-              <Sidebar />
-              <div className="ml-64 w-full bg-gray-100 min-h-screen p-6">
-                <StudentAttendance />
+            <ProtectedRoute>
+              <div className="flex">
+                <Sidebar />
+                <div className="ml-64 w-full bg-gray-100 min-h-screen p-6">
+                  <StudentAttendance />
+                </div>
               </div>
-            </div>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/admin-dashboard/attendance-view"
           element={
-            <div className="flex">
-              <Sidebar />
-              <div className="ml-64 w-full bg-gray-100 min-h-screen p-6">
-                <ViewAttendance />
+            <ProtectedRoute>
+              <div className="flex">
+                <Sidebar />
+                <div className="ml-64 w-full bg-gray-100 min-h-screen p-6">
+                  <ViewAttendance />
+                </div>
               </div>
-            </div>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/admin-dashboard/view-result"
           element={
-            <div className="flex">
-              <Sidebar />
-              <div className="ml-64 w-full bg-gray-100 min-h-screen p-6">
-                <ViewResult />
+            <ProtectedRoute>
+              <div className="flex">
+                <Sidebar />
+                <div className="ml-64 w-full bg-gray-100 min-h-screen p-6">
+                  <ViewResult />
+                </div>
               </div>
-            </div>
+            </ProtectedRoute>
           }
         />
 

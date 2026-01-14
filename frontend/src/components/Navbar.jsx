@@ -206,9 +206,56 @@ const Navbar = () => {
 
         {/* Floating glass decorative circles */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-40 right-12 w-24 h-24 border-2 border-white/20 rounded-full backdrop-blur-sm" style={{ animation: 'ping 3s cubic-bezier(0, 0, 0.2, 1) infinite' }}></div>
-          <div className="absolute bottom-40 left-12 w-20 h-20 border-2 border-cyan-300/20 rounded-full backdrop-blur-sm" style={{ animation: 'ping 4s cubic-bezier(0, 0, 0.2, 1) infinite', animationDelay: '1s' }}></div>
-          <div className="absolute top-1/2 right-20 w-16 h-16 border-2 border-purple-300/20 rounded-full backdrop-blur-sm" style={{ animation: 'ping 5s cubic-bezier(0, 0, 0.2, 1) infinite', animationDelay: '2s' }}></div>
+
+          <div
+            className="absolute top-40 right-12 w-24 h-24 border-2 border-white/20 rounded-full backdrop-blur-sm"
+            style={{
+              animation: 'glass-ping 3s ease-out infinite, glass-float 6s ease-in-out infinite'
+            }}
+          ></div>
+
+          <div
+            className="absolute bottom-40 left-12 w-20 h-20 border-2 border-cyan-300/20 rounded-full backdrop-blur-sm"
+            style={{
+              animation: 'glass-ping 4s ease-out infinite, glass-float 7s ease-in-out infinite',
+              animationDelay: '1s'
+            }}
+          ></div>
+
+          <div
+            className="absolute top-1/2 right-20 w-16 h-16 border-2 border-purple-300/20 rounded-full backdrop-blur-sm"
+            style={{
+              animation: 'glass-ping 5s ease-out infinite, glass-float 8s ease-in-out infinite',
+              animationDelay: '2s'
+            }}
+          ></div>
+
+        </div>{/* Floating glass decorative circles */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+
+          <div
+            className="absolute top-40 right-12 w-24 h-24 border-2 border-white/20 rounded-full backdrop-blur-sm"
+            style={{
+              animation: 'glass-ping 3s ease-out infinite, glass-float 6s ease-in-out infinite'
+            }}
+          ></div>
+
+          <div
+            className="absolute bottom-40 left-12 w-20 h-20 border-2 border-cyan-300/20 rounded-full backdrop-blur-sm"
+            style={{
+              animation: 'glass-ping 4s ease-out infinite, glass-float 7s ease-in-out infinite',
+              animationDelay: '1s'
+            }}
+          ></div>
+
+          <div
+            className="absolute top-1/2 right-20 w-16 h-16 border-2 border-purple-300/20 rounded-full backdrop-blur-sm"
+            style={{
+              animation: 'glass-ping 5s ease-out infinite, glass-float 8s ease-in-out infinite',
+              animationDelay: '2s'
+            }}
+          ></div>
+
         </div>
 
         {/* Footer info in mobile menu - Fixed at bottom of the menu container */}

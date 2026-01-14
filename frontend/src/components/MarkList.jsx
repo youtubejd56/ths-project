@@ -19,7 +19,7 @@ const SUBJECTS = [
 
 const DIVISIONS = ["10A", "10B", "9A", "9B", "8A", "8B"];
 const EXAM_TYPES = ["First Term", "Second Term", "Annual Exam"]; // ✅ new
-const BASE_URL = `${API_BASE_URL}/api`;
+
 
 export default function MarkList() {
   const [selectedDivision, setSelectedDivision] = useState(DIVISIONS[0]);

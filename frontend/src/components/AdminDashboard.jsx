@@ -112,118 +112,104 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      {/* Toast container */}
-      <ToastContainer position="top-right" autoClose={4000} />
-
+    <div className="min-h-screen bg-gray-100 p-4 md:p-6">
       {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">
+      <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-3 mb-6">
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-800 leading-tight">
           Welcome Admin Dashboard {adminData ? `- ${adminData.username ?? ""}` : ""}
         </h1>
-        <div className="flex items-center gap-4">
+
+        <div className="flex items-center gap-3 self-start md:self-center">
           <button
             onClick={handleLogout}
-            className="flex items-center gap-2 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition shadow-md"
+            className="flex items-center gap-2 bg-red-500 text-white px-3 py-2 rounded-lg hover:bg-red-600 transition shadow-md text-sm md:text-base"
           >
             <FaSignOutAlt />
             Logout
           </button>
-          <FaUserCircle className="text-4xl text-gray-600" />
+          <FaUserCircle className="text-3xl md:text-4xl text-gray-600" />
         </div>
       </div>
 
       {/* Updates */}
-      <div className="bg-white p-6 rounded-2xl shadow mb-6">
-        <h2 className="text-xl font-semibold mb-2 text-gray-800">
+      <div className="bg-white p-4 md:p-6 rounded-xl shadow mb-6">
+        <h2 className="text-lg md:text-xl font-semibold text-gray-800 mb-2">
           Student Activities & Updates
         </h2>
-        <p className="text-gray-500">
+        <p className="text-gray-500 text-sm md:text-base">
           View attendance performance and live updates from your students.
         </p>
       </div>
 
-      {/* Attendance Graph */}
-      <div className="bg-white p-6 rounded-2xl shadow mb-6">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
-          <h2 className="text-xl font-semibold">
+      {/* Attendance */}
+      <div className="bg-white p-4 md:p-6 rounded-xl shadow mb-6">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
+          <h2 className="text-lg md:text-xl font-semibold">
             {viewMode === "week"
               ? `Class Attendance (${selectedDivision} - This Week)`
-              : `Monthly Attendance Performance (${selectedDivision})`}
+              : `Monthly Attendance (${selectedDivision})`}
           </h2>
 
-          <div className="flex items-center gap-4">
-            {/* Division Selector */}
-            <div className="flex gap-2 flex-wrap">
-              {divisions.map((div) => (
-                <button
-                  key={div}
-                  onClick={() => setSelectedDivision(div)}
-                  disabled={loading.attendance}
-                  className={`px-3 py-1 rounded-lg text-sm ${selectedDivision === div
+          <div className="flex flex-wrap gap-2">
+            {divisions.map((div) => (
+              <button
+                key={div}
+                onClick={() => setSelectedDivision(div)}
+                className={`px-3 py-1 rounded-lg text-sm ${selectedDivision === div
                     ? "bg-blue-600 text-white"
-                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                    }`}
-                >
-                  {div}
-                </button>
-              ))}
-            </div>
+                    : "bg-gray-200 text-gray-700"
+                  }`}
+              >
+                {div}
+              </button>
+            ))}
 
-            {/* View Mode Toggle */}
-            <div className="flex gap-2">
-              <button
-                className={`px-3 py-1 rounded-lg ${viewMode === "week" ? "bg-green-500 text-white" : "bg-gray-200"
-                  }`}
-                onClick={() => setViewMode("week")}
-              >
-                Weekly
-              </button>
-              <button
-                className={`px-3 py-1 rounded-lg ${viewMode === "month" ? "bg-green-500 text-white" : "bg-gray-200"
-                  }`}
-                onClick={() => setViewMode("month")}
-              >
-                Monthly
-              </button>
-            </div>
+            <button
+              className={`px-3 py-1 rounded-lg text-sm ${viewMode === "week" ? "bg-green-500 text-white" : "bg-gray-200"
+                }`}
+              onClick={() => setViewMode("week")}
+            >
+              Weekly
+            </button>
+
+            <button
+              className={`px-3 py-1 rounded-lg text-sm ${viewMode === "month" ? "bg-green-500 text-white" : "bg-gray-200"
+                }`}
+              onClick={() => setViewMode("month")}
+            >
+              Monthly
+            </button>
           </div>
         </div>
 
-        <div style={{ width: "100%", height: 350 }}>
-          {loading.attendance ? (
-            <div className="flex items-center justify-center h-full text-gray-500">
-              Loading attendance...
-            </div>
-          ) : (
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={viewMode === "week" ? weeklyData : monthlyData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey={viewMode === "week" ? "day" : "month"} />
-                <YAxis allowDecimals={false} />
-                <Tooltip formatter={(v, name) => [`${v} students`, name]} />
-                <Legend />
-                <Bar dataKey="Present" fill="#34D399" radius={[6, 6, 0, 0]} />
-                <Bar dataKey="Absent" fill="#F87171" radius={[6, 6, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          )}
+        {/* Chart Responsive */}
+        <div className="w-full h-64 md:h-80">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={viewMode === "week" ? weeklyData : monthlyData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey={viewMode === "week" ? "day" : "month"} />
+              <YAxis allowDecimals={false} />
+              <Tooltip formatter={(v) => `${v} students`} />
+              <Legend />
+              <Bar dataKey="Present" fill="#34D399" radius={[6, 6, 0, 0]} />
+              <Bar dataKey="Absent" fill="#F87171" radius={[6, 6, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
       </div>
 
       {/* Divisions */}
-      <div className="bg-white p-6 rounded-2xl shadow mb-6">
-        <h2 className="text-xl font-semibold mb-4">MarkList Divisions</h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+      <div className="bg-white p-4 md:p-6 rounded-xl shadow mb-6">
+        <h2 className="text-lg md:text-xl font-semibold mb-3">MarkList Divisions</h2>
+        <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
           {divisions.map((div) => (
             <button
               key={div}
-              onClick={() => setSelectedDivision(div)}
-              disabled={loading.attendance}
-              className={`p-4 rounded-xl text-center shadow font-semibold transition ${selectedDivision === div
-                ? "bg-blue-600 text-white"
-                : "bg-gray-100 text-gray-700 hover:bg-green-100"
+              className={`p-3 rounded-xl text-center shadow font-semibold text-sm md:text-base ${selectedDivision === div
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-100 text-gray-700"
                 }`}
+              onClick={() => setSelectedDivision(div)}
             >
               {div}
             </button>
@@ -231,6 +217,7 @@ const AdminDashboard = () => {
         </div>
       </div>
     </div>
+
   );
 };
 

@@ -27,13 +27,25 @@ const Event = () => {
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
-    if (selectedFile && selectedFile.size > 10 * 1024 * 1024) {
-      alert("❌ File size must be less than 10MB!");
-      e.target.value = null; // Clear input
+    if (!selectedFile) return;
+
+    // Only allow images
+    if (!selectedFile.type.startsWith("image/")) {
+      alert("❌ Only image files are allowed!");
+      e.target.value = null;
       return;
     }
+
+    // Image max size: 500KB
+    if (selectedFile.size > 500 * 1024) {
+      alert("❌ Image must be less than 500KB!");
+      e.target.value = null;
+      return;
+    }
+
     setFile(selectedFile);
   };
+
 
   const removeFile = () => {
     setFile(null);
@@ -96,7 +108,7 @@ const Event = () => {
   };
 
   return (
-    <div className="px-8 py-6 h-screen">
+    <div className="px-8 py-6 min-h-screen pb-32">
       <h2 className="text-3xl font-bold mb-6">Event Posts</h2>
 
       <button
@@ -199,7 +211,7 @@ const Event = () => {
             <div className="border-2 border-dashed border-gray-300 p-4 text-center rounded-lg mb-4">
               <input
                 type="file"
-                accept="image/*,video/*,application/pdf"
+                accept="image/*"
                 onChange={handleFileChange}
                 id="fileInput"
                 className="hidden"
