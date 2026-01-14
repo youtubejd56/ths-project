@@ -15,7 +15,6 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-
 const AdminDashboard = () => {
   const [adminData, setAdminData] = useState(null);
   const [viewMode, setViewMode] = useState("week");
@@ -25,7 +24,6 @@ const AdminDashboard = () => {
 
   const divisions = ["10A", "10B", "9A", "9B", "8A", "8B"];
 
-  // normalize backend attendance response
   const parseAttendance = (raw) => {
     const weeklyRaw = raw?.weekly || [];
     const monthlyRaw = raw?.monthly || [];
@@ -50,9 +48,8 @@ const AdminDashboard = () => {
   useEffect(() => {
     let mounted = true;
 
-    const fetchAll = async () => {
+    const fetchData = async () => {
       setLoading({ admin: true, attendance: true });
-
       try {
         const [adminRes, attendanceRes] = await Promise.all([
           api.get("/admin-dashboard/"),
@@ -64,20 +61,14 @@ const AdminDashboard = () => {
         setAttendanceData(parseAttendance(attendanceRes?.data ?? {}));
       } catch (err) {
         if (!mounted) return;
-        const status = err.response?.status;
-        const msg =
-          status === 401
-            ? "Unauthorized – please login again."
-            : "Error fetching data. Try again.";
-        toast.error(msg);
-        console.error("AdminDashboard fetch error:", status, err.response?.data ?? err.message);
+        toast.error("Error fetching data.");
       } finally {
         if (!mounted) return;
         setLoading({ admin: false, attendance: false });
       }
     };
 
-    fetchAll();
+    fetchData();
     return () => {
       mounted = false;
     };
@@ -112,10 +103,12 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4 md:p-6">
+    <div className="min-h-screen bg-gray-100 p-4 md:p-6 overflow-x-hidden">
+      <ToastContainer position="top-right" autoClose={3000} />
+
       {/* Header */}
       <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-3 mb-6">
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-800 leading-tight">
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-800 break-words">
           Welcome Admin Dashboard {adminData ? `- ${adminData.username ?? ""}` : ""}
         </h1>
 
@@ -124,8 +117,7 @@ const AdminDashboard = () => {
             onClick={handleLogout}
             className="flex items-center gap-2 bg-red-500 text-white px-3 py-2 rounded-lg hover:bg-red-600 transition shadow-md text-sm md:text-base"
           >
-            <FaSignOutAlt />
-            Logout
+            <FaSignOutAlt /> Logout
           </button>
           <FaUserCircle className="text-3xl md:text-4xl text-gray-600" />
         </div>
@@ -137,7 +129,7 @@ const AdminDashboard = () => {
           Student Activities & Updates
         </h2>
         <p className="text-gray-500 text-sm md:text-base">
-          View attendance performance and live updates from your students.
+          View attendance performance and live updates.
         </p>
       </div>
 
@@ -150,39 +142,36 @@ const AdminDashboard = () => {
               : `Monthly Attendance (${selectedDivision})`}
           </h2>
 
+          {/* button wrap fix */}
           <div className="flex flex-wrap gap-2">
-            {divisions.map((div) => (
+            {divisions.map((d) => (
               <button
-                key={div}
-                onClick={() => setSelectedDivision(div)}
-                className={`px-3 py-1 rounded-lg text-sm ${selectedDivision === div
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-200 text-gray-700"
+                key={d}
+                onClick={() => setSelectedDivision(d)}
+                className={`px-3 py-1 rounded-lg text-sm ${selectedDivision === d ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-700"
                   }`}
               >
-                {div}
+                {d}
               </button>
             ))}
 
             <button
+              onClick={() => setViewMode("week")}
               className={`px-3 py-1 rounded-lg text-sm ${viewMode === "week" ? "bg-green-500 text-white" : "bg-gray-200"
                 }`}
-              onClick={() => setViewMode("week")}
             >
               Weekly
             </button>
-
             <button
+              onClick={() => setViewMode("month")}
               className={`px-3 py-1 rounded-lg text-sm ${viewMode === "month" ? "bg-green-500 text-white" : "bg-gray-200"
                 }`}
-              onClick={() => setViewMode("month")}
             >
               Monthly
             </button>
           </div>
         </div>
 
-        {/* Chart Responsive */}
         <div className="w-full h-64 md:h-80">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={viewMode === "week" ? weeklyData : monthlyData}>
@@ -202,22 +191,19 @@ const AdminDashboard = () => {
       <div className="bg-white p-4 md:p-6 rounded-xl shadow mb-6">
         <h2 className="text-lg md:text-xl font-semibold mb-3">MarkList Divisions</h2>
         <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
-          {divisions.map((div) => (
+          {divisions.map((d) => (
             <button
-              key={div}
-              className={`p-3 rounded-xl text-center shadow font-semibold text-sm md:text-base ${selectedDivision === div
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-100 text-gray-700"
+              key={d}
+              onClick={() => setSelectedDivision(d)}
+              className={`p-3 rounded-xl text-center shadow font-semibold text-sm md:text-base ${selectedDivision === d ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-700"
                 }`}
-              onClick={() => setSelectedDivision(div)}
             >
-              {div}
+              {d}
             </button>
           ))}
         </div>
       </div>
     </div>
-
   );
 };
 
