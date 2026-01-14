@@ -11,6 +11,30 @@ const Event = () => {
   const [showModal, setShowModal] = useState(false);
   const [wordCount, setWordCount] = useState(0);
 
+  // --- Weekly post limit logic ---
+  const getWeekNumber = () => {
+    const now = new Date();
+    const startOfYear = new Date(now.getFullYear(), 0, 1);
+    const days = Math.floor((now - startOfYear) / (24 * 60 * 60 * 1000));
+    return Math.ceil((days + startOfYear.getDay() + 1) / 7);
+  };
+
+  const getWeeklyImageCount = () => {
+    const data = JSON.parse(localStorage.getItem('weeklyImageData')) || {};
+    const currentWeek = getWeekNumber();
+    if (data.week !== currentWeek) {
+      localStorage.setItem('weeklyImageData', JSON.stringify({ week: currentWeek, count: 0 }));
+      return 0;
+    }
+    return data.count || 0;
+  };
+
+  const updateWeeklyImageCount = (count) => {
+    const currentWeek = getWeekNumber();
+    localStorage.setItem('weeklyImageData', JSON.stringify({ week: currentWeek, count }));
+  };
+  // --- End weekly logic ---
+
   useEffect(() => {
     axios.get(`${API_BASE}/api/posts/`)
       .then((res) => {
@@ -30,14 +54,14 @@ const Event = () => {
     if (!selectedFile) return;
 
     // Only allow images
-    if (!selectedFile.type.startsWith("image/")) {
-      alert("❌ Only image files are allowed!");
+    if (!selectedFile.type.startsWith("image/") && !selectedFile.type.startsWith("video/")) {
+      alert("❌ Only image or video files are allowed!");
       e.target.value = null;
       return;
     }
 
     // Image max size: 500KB
-    if (selectedFile.size > 500 * 1024) {
+    if (selectedFile.type.startsWith("image/") && selectedFile.size > 500 * 1024) {
       alert("❌ Image must be less than 500KB!");
       e.target.value = null;
       return;
@@ -45,7 +69,6 @@ const Event = () => {
 
     setFile(selectedFile);
   };
-
 
   const removeFile = () => {
     setFile(null);
@@ -70,6 +93,15 @@ const Event = () => {
       return;
     }
 
+    // Weekly image limit check
+    if (file && file.type.startsWith('image/')) {
+      const currentCount = getWeeklyImageCount();
+      if (currentCount >= 4) {
+        alert('❌ Maximum 4 image posts per week are allowed. Try next week!');
+        return;
+      }
+    }
+
     const formData = new FormData();
     if (file) formData.append('file', file);
     formData.append('description', description);
@@ -91,6 +123,13 @@ const Event = () => {
       setDescription('');
       setShowModal(false);
       setWordCount(0);
+
+      // Update weekly image count
+      if (file && file.type.startsWith('image/')) {
+        const currentCount = getWeeklyImageCount();
+        updateWeeklyImageCount(currentCount + 1);
+      }
+
     } catch (error) {
       console.error('Upload failed:', error);
       alert('Failed to upload post.');
@@ -211,7 +250,7 @@ const Event = () => {
             <div className="border-2 border-dashed border-gray-300 p-4 text-center rounded-lg mb-4">
               <input
                 type="file"
-                accept="image/*"
+                accept="image/*,video/*"
                 onChange={handleFileChange}
                 id="fileInput"
                 className="hidden"
