@@ -14,6 +14,7 @@ from django.utils import timezone
 from datetime import date, timedelta
 import calendar
 import random
+from cloudinary.uploader import destroy
 
 from .models import Attendance, StudentMark, EventPost, Admission, Shorts, SupportMessage, EmailOTP
 from .serializers import (
@@ -24,10 +25,57 @@ from .serializers import (
     ShortsSerializer,
 )
 
+
+
+
+
+
 # -------------------- Event Post --------------------
+
 class EventPostViewSet(viewsets.ModelViewSet):
     queryset = EventPost.objects.all().order_by('-created_at')
     serializer_class = EventPostSerializer
+
+    def get_permissions(self):
+        # Anyone can view posts
+        if self.action in ['list', 'retrieve']:
+            return [AllowAny()]
+
+        # Anyone can create/upload posts
+        if self.action == 'create':
+            return [AllowAny()]
+
+        # Only authenticated users can delete (we'll check admin in destroy)
+        if self.action == 'destroy':
+            return [IsAuthenticated()]
+
+        return [IsAuthenticated()]
+
+    def create(self, request, *args, **kwargs):
+        # Max 4 total posts
+        if EventPost.objects.count() >= 4:
+            return Response({"detail": "Max 4 posts allowed"}, status=status.HTTP_400_BAD_REQUEST)
+        return super().create(request, *args, **kwargs)
+
+    def destroy(self, request, *args, **kwargs):
+        # Only admin can delete
+        if not request.user.is_staff:
+            return Response({"detail": "Only admin can delete posts"}, status=status.HTTP_403_FORBIDDEN)
+
+        instance = self.get_object()
+
+        # Optional: delete the file from Cloudinary
+        if instance.file and hasattr(instance.file, 'name'):
+            try:
+                public_id = instance.file.name.rsplit('/', 1)[-1].split('.')[0]
+                destroy(public_id)
+            except:
+                pass  # ignore if Cloudinary deletion fails
+
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 
 
 # -------------------- Admin --------------------
@@ -383,3 +431,7 @@ def reset_password(request):
     EmailOTP.objects.filter(user=user).delete()
 
     return JsonResponse({"message": "Password reset successful"})
+
+
+    # -------------------- admin event posts Delete --------------------    
+
