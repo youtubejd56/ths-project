@@ -318,41 +318,26 @@ def ai_chat(request):
             status=400
         )
 
-    if not settings.OPENAI_API_KEY:
+    if not getattr(settings, 'GEMINI_API_KEY', None):
         return JsonResponse(
-            {"reply": "Server error: OpenAI API key not configured."},
+            {"reply": "Server error: Gemini API key not configured."},
             status=500
         )
 
     try:
-        from openai import OpenAI
-        import traceback
-
-        # Log check
-        print(f"DEBUG: Key starts with {settings.OPENAI_API_KEY[:8]}...")
-
-        client = OpenAI(
-            api_key=settings.OPENAI_API_KEY,
-            max_retries=0, 
-            timeout=10.0
-        )
-
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {
-                    "role": "system",
-                    "content": "You are a helpful school support assistant."
-                },
-                {
-                    "role": "user",
-                    "content": user_msg
-                }
-            ],
-            temperature=0.3,
-        )
-
-        reply = response.choices[0].message.content
+        import google.generativeai as genai
+        
+        # Configure Gemini
+        genai.configure(api_key=settings.GEMINI_API_KEY)
+        model = genai.GenerativeModel('gemini-1.5-flash')
+        
+        chat = model.start_chat(history=[
+            {"role": "user", "parts": ["You are a helpful school support assistant."]},
+            {"role": "model", "parts": ["Understood. I am ready to help with school-related queries."]},
+        ])
+        
+        response = chat.send_message(user_msg)
+        reply = response.text
 
         # Save to database
         SupportMessage.objects.create(user_query=user_msg, bot_response=reply)
@@ -360,14 +345,12 @@ def ai_chat(request):
         return JsonResponse({"reply": reply})
 
     except Exception as e:
-        print(f"OPENAI ERROR TYPE: {type(e).__name__}")
-        print(f"OPENAI ERROR MSG: {str(e)}")
-        # traceback.print_exc()
+        print(f"GEMINI ERROR TYPE: {type(e).__name__}")
+        print(f"GEMINI ERROR MSG: {str(e)}")
         
-        # FALLBACK: Return a polite message instead of crashing
         return JsonResponse(
             {
-                "reply": "I am currently in 'Offline Mode' due to server limits. Please contact the school office directly for help with this specific query, or try asking about 'Admission' or 'Events'."
+                "reply": "I am currently in 'Offline Mode' due to server limits. Please contact the school office directly for help."
             },
             status=200
         )
