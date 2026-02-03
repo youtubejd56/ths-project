@@ -27,9 +27,6 @@ from .serializers import (
 
 
 
-
-
-
 # -------------------- Event Post --------------------
 
 class EventPostViewSet(viewsets.ModelViewSet):
@@ -124,7 +121,11 @@ class AdmissionView(APIView):
 
 
 class AdmissionListView(APIView):
+    permission_classes = [IsAuthenticated]
+    
     def get(self, request):
+        if not request.user.is_staff:
+            return Response({"error": "Admin access required"}, status=403)
         admissions = Admission.objects.all().order_by('-id')
         serializer = AdmissionSerializer(admissions, many=True)
         return Response(serializer.data)
@@ -283,8 +284,20 @@ def admin_forgot_password(request):
 
 # -------------------- Shorts Video --------------------
 class ShortsViewSet(viewsets.ModelViewSet):
-    queryset = Shorts.objects.all()
+    queryset = Shorts.objects.all().order_by('-created_at')
     serializer_class = ShortsSerializer
+
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            return [AllowAny()]
+        return [IsAuthenticated()]
+
+    def destroy(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            return Response({"error": "Only admins can delete videos"}, status=403)
+        return super().destroy(request, *args, **kwargs)
+
+    
 
 
 # -------------------- Attendance ViewSet --------------------
@@ -339,9 +352,9 @@ def ai_chat(request):
         return JsonResponse({"reply": reply})
 
     except Exception as e:
-        print("OPENAI ERROR:", e)  # 🔥 REAL error visible
+        print("OPENAI ERROR:", e)
         return JsonResponse(
-            {"reply": "AI service unavailable. Check server logs."},
+            {"reply": "AI service unavailable.", "error": str(e)},
             status=503
         )
     
@@ -384,20 +397,20 @@ def verify_otp(request):
     otp = request.data.get("otp")
 
     if not email or not otp:
-        return JsonResponse({"message": "Email and OTP are required"}, status=400)
+        return JsonResponse({"error": "Email and OTP are required"}, status=400)
 
     try:
         user = User.objects.get(email=email)
     except User.DoesNotExist:
-        return JsonResponse({"message": "User not found"}, status=404)
+        return JsonResponse({"error": "User not found"}, status=404)
 
     try:
         otp_entry = EmailOTP.objects.filter(user=user, otp=otp, verified=False).latest("created_at")
     except EmailOTP.DoesNotExist:
-        return JsonResponse({"message": "Invalid OTP"}, status=400)
+        return JsonResponse({"error": "Invalid OTP"}, status=400)
 
     if otp_entry.is_expired():
-        return JsonResponse({"message": "OTP expired"}, status=400)
+        return JsonResponse({"error": "OTP expired"}, status=400)
 
     otp_entry.verified = True
     otp_entry.save()
@@ -413,16 +426,16 @@ def reset_password(request):
     new_password = request.data.get("password")
 
     if not email or not new_password:
-        return JsonResponse({"message": "Email and password are required"}, status=400)
+        return JsonResponse({"error": "Email and password are required"}, status=400)
 
     try:
         user = User.objects.get(email=email)
     except User.DoesNotExist:
-        return JsonResponse({"message": "User not found"}, status=404)
+        return JsonResponse({"error": "User not found"}, status=404)
 
     # Ensure OTP was verified
     if not EmailOTP.objects.filter(user=user, verified=True).exists():
-        return JsonResponse({"message": "OTP not verified"}, status=400)
+        return JsonResponse({"error": "OTP not verified"}, status=400)
 
     user.set_password(new_password)
     user.save()
