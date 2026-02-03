@@ -326,8 +326,16 @@ def ai_chat(request):
 
     try:
         from openai import OpenAI
+        import traceback
 
-        client = OpenAI(api_key=settings.OPENAI_API_KEY)
+        # Log check
+        print(f"DEBUG: Key starts with {settings.OPENAI_API_KEY[:8]}...")
+
+        client = OpenAI(
+            api_key=settings.OPENAI_API_KEY,
+            max_retries=0, 
+            timeout=10.0
+        )
 
         response = client.chat.completions.create(
             model="gpt-4o-mini",
@@ -352,9 +360,12 @@ def ai_chat(request):
         return JsonResponse({"reply": reply})
 
     except Exception as e:
-        print("OPENAI ERROR:", e)
+        print(f"OPENAI ERROR TYPE: {type(e).__name__}")
+        print(f"OPENAI ERROR MSG: {str(e)}")
+        traceback.print_exc()
+        
         return JsonResponse(
-            {"reply": "AI service unavailable.", "error": str(e)},
+            {"reply": "AI service unavailable.", "error": f"{type(e).__name__}: {str(e)}"},
             status=503
         )
     
