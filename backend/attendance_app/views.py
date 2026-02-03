@@ -329,15 +329,29 @@ def ai_chat(request):
         
         # Configure Gemini
         genai.configure(api_key=settings.GEMINI_API_KEY)
-        model = genai.GenerativeModel('gemini-1.5-flash')
         
+        # Try 'gemini-1.5-flash' for maximum compatibility
+        model_name = 'gemini-1.5-flash'
+        try:
+            model = genai.GenerativeModel(model_name)
+        except:
+            model_name = 'gemini-pro'
+            model = genai.GenerativeModel(model_name)
+            
+        print(f"DEBUG: Using Gemini model: {model_name}")
+        
+        # Create a chat session
         chat = model.start_chat(history=[
             {"role": "user", "parts": ["You are a helpful school support assistant."]},
             {"role": "model", "parts": ["Understood. I am ready to help with school-related queries."]},
         ])
         
         response = chat.send_message(user_msg)
-        reply = response.text
+        
+        if not response.text:
+            reply = "I'm sorry, I couldn't generate a response. Please try again."
+        else:
+            reply = response.text
 
         # Save to database
         SupportMessage.objects.create(user_query=user_msg, bot_response=reply)
@@ -345,8 +359,10 @@ def ai_chat(request):
         return JsonResponse({"reply": reply})
 
     except Exception as e:
+        import traceback
         print(f"GEMINI ERROR TYPE: {type(e).__name__}")
         print(f"GEMINI ERROR MSG: {str(e)}")
+        traceback.print_exc()
         
         return JsonResponse(
             {
