@@ -330,28 +330,50 @@ def ai_chat(request):
         # Configure Gemini
         genai.configure(api_key=settings.GEMINI_API_KEY)
         
-        # Try 'gemini-1.5-flash' for maximum compatibility
-        model_name = 'gemini-1.5-flash'
-        try:
-            model = genai.GenerativeModel(model_name)
-        except:
-            model_name = 'gemini-pro'
-            model = genai.GenerativeModel(model_name)
+        # Define a list of models to try in order of preference
+        models_to_try = ['gemini-1.5-flash', 'gemini-pro', 'gemini-1.5-pro']
+        last_error = None
+        reply = None
+
+        for model_name in models_to_try:
+            try:
+                print(f"DEBUG: Attempting Gemini model: {model_name}")
+                model = genai.GenerativeModel(model_name)
+                
+                # Check if it actually works by sending the message
+                # Using a fresh chat session for each attempt
+                chat = model.start_chat(history=[
+                    {"role": "user", "parts": ["You are a helpful school support assistant."]},
+                    {"role": "model", "parts": ["Understood. I am ready to help with school-related queries."]},
+                ])
+                
+                response = chat.send_message(user_msg)
+                
+                if response.text:
+                    reply = response.text
+                    print(f"DEBUG: Success with model {model_name}")
+                    break
+            except Exception as e:
+                print(f"DEBUG: Model {model_name} failed: {str(e)}")
+                last_error = str(e)
+                continue
+
+        if not reply:
+            # If all tried models fail, maybe try one from the list dynamically?
+            print("DEBUG: All preferred Gemini models failed. Logging available models...")
+            try:
+                available = [m.name for m in genai.list_models() if 'generateContent' in m.supported_generation_methods]
+                print(f"DEBUG: Available models: {available}")
+            except:
+                pass
             
-        print(f"DEBUG: Using Gemini model: {model_name}")
-        
-        # Create a chat session
-        chat = model.start_chat(history=[
-            {"role": "user", "parts": ["You are a helpful school support assistant."]},
-            {"role": "model", "parts": ["Understood. I am ready to help with school-related queries."]},
-        ])
-        
-        response = chat.send_message(user_msg)
-        
-        if not response.text:
-            reply = "I'm sorry, I couldn't generate a response. Please try again."
-        else:
-            reply = response.text
+            error_msg = last_error or "Unknown error"
+            return JsonResponse(
+                {
+                    "reply": f"I am currently in 'Offline Mode' due to a technical issue. (Error: {error_msg})"
+                },
+                status=200
+            )
 
         # Save to database
         SupportMessage.objects.create(user_query=user_msg, bot_response=reply)
@@ -360,13 +382,12 @@ def ai_chat(request):
 
     except Exception as e:
         import traceback
-        print(f"GEMINI ERROR TYPE: {type(e).__name__}")
-        print(f"GEMINI ERROR MSG: {str(e)}")
+        print(f"GEMINI CRITICAL ERROR: {str(e)}")
         traceback.print_exc()
         
         return JsonResponse(
             {
-                "reply": "I am currently in 'Offline Mode' due to server limits. Please contact the school office directly for help."
+                "reply": f"I am currently in 'Offline Mode'. Please try again later. (System Error: {str(e)})"
             },
             status=200
         )
