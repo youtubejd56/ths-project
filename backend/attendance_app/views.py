@@ -362,11 +362,14 @@ def ai_chat(request):
     except Exception as e:
         print(f"OPENAI ERROR TYPE: {type(e).__name__}")
         print(f"OPENAI ERROR MSG: {str(e)}")
-        traceback.print_exc()
+        # traceback.print_exc()
         
+        # FALLBACK: Return a polite message instead of crashing
         return JsonResponse(
-            {"reply": "AI service unavailable.", "error": f"{type(e).__name__}: {str(e)}"},
-            status=503
+            {
+                "reply": "I am currently in 'Offline Mode' due to server limits. Please contact the school office directly for help with this specific query, or try asking about 'Admission' or 'Events'."
+            },
+            status=200
         )
     
 
