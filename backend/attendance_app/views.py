@@ -330,50 +330,41 @@ def ai_chat(request):
         # Configure Gemini
         genai.configure(api_key=settings.GEMINI_API_KEY)
         
-        # Define a list of models to try in order of preference
-        models_to_try = ['gemini-1.5-flash', 'gemini-pro', 'gemini-1.5-pro']
-        last_error = None
-        reply = None
-
-        for model_name in models_to_try:
-            try:
-                print(f"DEBUG: Attempting Gemini model: {model_name}")
-                model = genai.GenerativeModel(model_name)
-                
-                # Check if it actually works by sending the message
-                # Using a fresh chat session for each attempt
-                chat = model.start_chat(history=[
-                    {"role": "user", "parts": ["You are a helpful school support assistant."]},
-                    {"role": "model", "parts": ["Understood. I am ready to help with school-related queries."]},
-                ])
-                
-                response = chat.send_message(user_msg)
-                
-                if response.text:
-                    reply = response.text
-                    print(f"DEBUG: Success with model {model_name}")
-                    break
-            except Exception as e:
-                print(f"DEBUG: Model {model_name} failed: {str(e)}")
-                last_error = str(e)
-                continue
-
-        if not reply:
-            # If all tried models fail, maybe try one from the list dynamically?
-            print("DEBUG: All preferred Gemini models failed. Logging available models...")
-            try:
-                available = [m.name for m in genai.list_models() if 'generateContent' in m.supported_generation_methods]
-                print(f"DEBUG: Available models: {available}")
-            except:
-                pass
+        # DYNAMIC MODEL SELECTION: Find what models this key actually has access to
+        print("DEBUG: Fetching available Gemini models...")
+        working_model_name = 'gemini-1.5-flash' # Default fallback
+        try:
+            available_models = [m.name for m in genai.list_models() if 'generateContent' in m.supported_generation_methods]
+            print(f"DEBUG: Found models: {available_models}")
             
-            error_msg = last_error or "Unknown error"
-            return JsonResponse(
-                {
-                    "reply": f"I am currently in 'Offline Mode' due to a technical issue. (Error: {error_msg})"
-                },
-                status=200
+            # Prioritize standard models
+            if 'models/gemini-1.5-flash' in available_models:
+                working_model_name = 'models/gemini-1.5-flash'
+            elif 'models/gemini-1.5-flash-latest' in available_models:
+                working_model_name = 'models/gemini-1.5-flash-latest'
+            elif 'models/gemini-pro' in available_models:
+                working_model_name = 'models/gemini-pro'
+            elif available_models:
+                # If preferred models aren't there, take the first one that supports generation
+                working_model_name = available_models[0]
+        except Exception as e:
+            print(f"DEBUG: Failed to list models: {e}")
+
+        print(f"DEBUG: Final choice: {working_model_name}")
+        model = genai.GenerativeModel(working_model_name)
+        
+        # Simpler generation call (more robust than chat session for debugging)
+        response = model.generate_content(
+            contents=user_msg,
+            generation_config=genai.types.GenerationConfig(
+                temperature=0.3,
             )
+        )
+        
+        if response.text:
+            reply = response.text
+        else:
+            reply = "I received an empty response. Could you try rephrasing your question?"
 
         # Save to database
         SupportMessage.objects.create(user_query=user_msg, bot_response=reply)
@@ -382,12 +373,14 @@ def ai_chat(request):
 
     except Exception as e:
         import traceback
-        print(f"GEMINI CRITICAL ERROR: {str(e)}")
+        error_type = type(e).__name__
+        error_msg = str(e)
+        print(f"GEMINI CRITICAL ERROR: {error_type} - {error_msg}")
         traceback.print_exc()
         
         return JsonResponse(
             {
-                "reply": f"I am currently in 'Offline Mode'. Please try again later. (System Error: {str(e)})"
+                "reply": f"I am currently in 'Offline Mode'. (System Error: {error_type}: {error_msg})"
             },
             status=200
         )
