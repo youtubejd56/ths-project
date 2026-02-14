@@ -118,25 +118,14 @@ const VideoUpload = () => {
                     {video.caption || "No caption provided."}
                   </p>
 
-                  <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-4">
-                    <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest">
+                  <div className="mt-4 border-t border-slate-100 pt-4 text-center">
+                    <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest text-center">
                       {isValidDate ? (
                         <>{new Date(video.created_at).toLocaleDateString()}</>
                       ) : (
                         "Recently Added"
                       )}
                     </p>
-
-
-                    <button
-                      onClick={() => handleDelete(video.id)}
-                      className="p-2 text-slate-400 hover:text-red-500 transition-colors rounded-lg hover:bg-red-50"
-                      title="Delete Video"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
-                    </button>
                   </div>
                 </div>
               </div>
