@@ -41,8 +41,8 @@ const VideoUpload = () => {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-50 via-gray-100 to-slate-200 p-6 flex flex-col items-center font-sans mt-20">
-      <div className="w-full max-w-7xl flex justify-between items-center mb-10">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 via-gray-100 to-slate-200 p-6 flex flex-col items-center font-sans">
+      <div className="w-full max-w-7xl flex justify-between items-center mb-10 pt-10">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-indigo-600 rounded-lg shadow-lg">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -98,7 +98,6 @@ const VideoUpload = () => {
                     }
                     controls
                     className="w-full h-full object-contain z-10"
-                    poster="/ths_logo.jpg"
                   />
                   {/* Background Blur Effect for Portrait Videos */}
                   <div
@@ -128,16 +127,16 @@ const VideoUpload = () => {
                       )}
                     </p>
 
-                    {/* Only show delete if they have admin potential or just add it hidden */}
-                    {/* <button
+
+                    <button
                       onClick={() => handleDelete(video.id)}
-                      className="p-2 text-slate-300 hover:text-red-500 transition-colors rounded-lg hover:bg-red-50"
+                      className="p-2 text-slate-400 hover:text-red-500 transition-colors rounded-lg hover:bg-red-50"
                       title="Delete Video"
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                       </svg>
-                    </button> */}
+                    </button>
                   </div>
                 </div>
               </div>
