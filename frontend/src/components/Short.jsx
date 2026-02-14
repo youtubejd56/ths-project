@@ -153,15 +153,15 @@ const Short = () => {
           ) : (
             <div className="relative group">
               <div className="absolute -inset-1 bg-linear-to-r from-indigo-600 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-300"></div>
-              <div className="relative">
+              <div className="relative bg-slate-900 rounded-2xl overflow-hidden flex items-center justify-center h-96 shadow-xl">
                 <video
                   src={video}
                   controls
-                  className="w-full rounded-2xl max-h-96 object-cover shadow-xl"
+                  className="w-full h-full object-contain"
                 />
                 <button
-                  onClick={handleRemoveVideo}
-                  className="absolute top-4 right-4 bg-red-500 text-white p-2.5 rounded-full hover:bg-red-600 shadow-lg hover:scale-110 transition-all duration-200"
+                  onClick={() => setVideo(null)}
+                  className="absolute top-4 right-4 bg-white/20 backdrop-blur-md hover:bg-white/40 p-2 rounded-full text-white transition-all z-20"
                 >
                   <X size={20} />
                 </button>

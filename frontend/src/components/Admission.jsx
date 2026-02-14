@@ -41,7 +41,17 @@ const Admission = () => {
 
     } catch (error) {
       console.error('Error submitting admission form:', error);
-      const errorMsg = error.response?.data?.error || 'Submission failed!';
+
+      let errorMsg = 'Submission failed!';
+      if (error.response && error.response.data) {
+        // Handle {'error': '...'} or {'detail': '...'} or direct string
+        errorMsg = error.response.data.error || error.response.data.detail || JSON.stringify(error.response.data);
+      } else if (error.request) {
+        errorMsg = 'No response from server. Check your connection.';
+      } else {
+        errorMsg = error.message;
+      }
+
       alert(errorMsg);
     }
   };
