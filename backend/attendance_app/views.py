@@ -288,7 +288,7 @@ class ShortsViewSet(viewsets.ModelViewSet):
     serializer_class = ShortsSerializer
 
     def get_permissions(self):
-        if self.action in ['list', 'retrieve']:
+        if self.action in ['list', 'retrieve', 'create']:
             return [AllowAny()]
         return [IsAuthenticated()]
 

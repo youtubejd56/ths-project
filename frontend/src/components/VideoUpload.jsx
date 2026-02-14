@@ -95,14 +95,14 @@ const VideoUpload = () => {
                 </p>
 
                 {/* Large Delete Button */}
-                <div className="mt-4 flex justify-end">
+                {/* <div className="mt-4 flex justify-end">
                   <button
                     onClick={() => handleDelete(video.id)}
                     className="bg-yellow-400 hover:bg-yellow-500 text-black font-medium py-2 px-4 rounded-lg transition"
                   >
                     🗑️ Delete Video
                   </button>
-                </div>
+                </div> */}
               </div>
             );
           })}

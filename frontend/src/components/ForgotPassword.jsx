@@ -8,18 +8,28 @@ const ForgotPassword = () => {
   const [message, setMessage] = useState("");
   const [isDark, setIsDark] = useState(true);
 
-
   const navigate = useNavigate();
 
   const handleSendOtp = async (e) => {
     e.preventDefault();
     setMessage("");
 
+    if (!email) {
+      setMessage("Please enter your email.");
+      return;
+    }
+
     try {
-      await api.post("/admin-send-otp/", { email });
-      setMessage("OTP sent to your email.");
+      // Ensure the correct POST body key "email"
+      const response = await api.post("/admin-send-otp/", { email });
+
+      // Success message from backend
+      setMessage(response.data.message || "OTP sent to your email.");
+
+      // Navigate after short delay
       setTimeout(() => navigate("/verify-otp", { state: { email } }), 800);
     } catch (error) {
+      // Show backend error if exists
       const errorMsg = error.response?.data?.error || "Failed to send OTP. Try again.";
       setMessage(errorMsg);
     }
@@ -43,7 +53,7 @@ const ForgotPassword = () => {
         )}
       </button>
 
-      {/* Animated Background Elements */}
+      {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-20 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
         <div className="absolute bottom-20 right-20 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse" style={{ animationDelay: '2s' }}></div>
@@ -59,13 +69,10 @@ const ForgotPassword = () => {
           Back to Login
         </Link>
 
-        {/* Card with Glow Effect */}
+        {/* Card */}
         <div className="relative group">
           <div className={`absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl blur ${isDark ? 'opacity-30' : 'opacity-20'} group-hover:opacity-50 transition duration-500`}></div>
-
           <div className={`relative ${isDark ? 'bg-slate-900/90' : 'bg-white'} backdrop-blur-xl rounded-3xl shadow-2xl border ${isDark ? 'border-white/10' : 'border-gray-200'} p-8 md:p-10`}>
-
-            {/* Header with Icon */}
             <div className="text-center mb-8">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl mb-4 shadow-lg relative">
                 <Lock className="w-8 h-8 text-white" />
@@ -73,7 +80,6 @@ const ForgotPassword = () => {
                   <span className="text-xs">?</span>
                 </div>
               </div>
-
               <h2 className="text-3xl font-bold mb-2">
                 <span className={`${isDark ? 'text-white' : 'bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent'}`}>
                   Forgot Password?
@@ -100,7 +106,6 @@ const ForgotPassword = () => {
                     required
                     className={`w-full px-4 py-3.5 ${isDark ? 'bg-white/5 border-white/10 text-white placeholder-gray-500' : 'bg-gray-50 border-gray-300 text-gray-900 placeholder-gray-400'} border-2 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300 outline-none`}
                   />
-                  <div className="absolute inset-0 -z-10 bg-gradient-to-r from-blue-500/0 via-blue-500/5 to-blue-500/0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity blur"></div>
                 </div>
               </div>
 
@@ -117,7 +122,7 @@ const ForgotPassword = () => {
                 </div>
               </button>
 
-              {/* Success Message */}
+              {/* Message */}
               {message && (
                 <div className="relative overflow-hidden rounded-xl animate-in fade-in slide-in-from-top-2 duration-500">
                   <div className={`absolute inset-0 ${isDark ? 'bg-gradient-to-r from-blue-500/20 to-green-500/20' : 'bg-gradient-to-r from-blue-100 to-green-100'}`}></div>
@@ -131,7 +136,7 @@ const ForgotPassword = () => {
               )}
             </div>
 
-            {/* Footer Info */}
+            {/* Footer */}
             <div className={`mt-8 pt-6 border-t ${isDark ? 'border-white/10' : 'border-gray-200'}`}>
               <div className="flex items-center justify-center gap-2 text-sm">
                 <Shield className={`w-4 h-4 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
@@ -141,7 +146,6 @@ const ForgotPassword = () => {
               </div>
             </div>
 
-            {/* Help Section */}
             <div className={`mt-6 text-center text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
               <p>
                 Remember your password?{' '}
@@ -152,13 +156,6 @@ const ForgotPassword = () => {
             </div>
           </div>
         </div>
-
-        {/* Additional Help */}
-        {/* <div className={`mt-6 text-center ${isDark ? 'text-gray-400' : 'text-gray-600'} text-sm`}>
-          <p>
-            Need help? <a href="/support" className={`font-semibold ${isDark ? 'text-blue-400 hover:text-blue-300' : 'text-indigo-600 hover:text-indigo-700'} transition-colors`}>Contact Support</a>
-          </p>
-        </div> */}
       </div>
     </div>
   );

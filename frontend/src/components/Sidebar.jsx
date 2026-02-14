@@ -1,65 +1,52 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import API_BASE_URL from "../api/config";
+import { FaTachometerAlt, FaClipboardList, FaUserGraduate, FaDivide, FaSignOutAlt, FaFileAlt, FaVideo } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
 
-const API_BASE = API_BASE_URL.replace(/\/$/, '');
+const Sidebar = () => {
+  const navigate = useNavigate();
 
-const AdminEventPosts = () => {
-  const [posts, setPosts] = useState([]);
-
-  useEffect(() => {
-    axios.get(`${API_BASE}/api/posts/`)
-      .then(res => setPosts(res.data.posts || res.data))
-      .catch(err => console.error("Failed to load posts:", err));
-  }, []);
-
-  const handleDelete = async (id) => {
-    if (!window.confirm("Delete this post?")) return;
-
-    try {
-      await axios.delete(`${API_BASE}/api/posts/${id}/`);
-      setPosts(posts.filter(p => p.id !== id));
-    } catch (err) {
-      console.error("Delete failed:", err);
-      alert("Failed to delete.");
-    }
+  const handleSignOut = () => {
+    localStorage.removeItem("token");
+    navigate("/adminlogin");
   };
 
   return (
-    <div className="p-6">
-      <h2 className="text-xl font-semibold mb-6">Manage Event Posts</h2>
+    <div className="bg-[#0D1B2A] text-white w-64 h-screen p-6 flex flex-col justify-between fixed left-0 top-0">
+      <div>
+        <h1 className="text-2xl font-bold mb-12">GOVT.THS PALA</h1>
+        <nav className="flex flex-col gap-6 text-sm font-medium">
+          <Link to="/admin-dashboard" className="flex items-center gap-3 hover:text-yellow-400 transition">
+            <FaTachometerAlt /> Dashboard
+          </Link>
+          <Link to="/admin-dashboard/marklist" className="flex items-center gap-3 hover:text-yellow-400 transition">
+            <FaUserGraduate /> Mark List
+          </Link>
+          {/* <Link to="/admin-dashboard/division" className="flex items-center gap-3 hover:text-yellow-400 transition">
+            <FaDivide /> Division
+          </Link> */}
+          <Link to="/admin-dashboard/attendance" className="flex items-center gap-3 hover:text-yellow-400 transition">
+            <FaClipboardList /> Attendance
+          </Link>
+          <Link to="/admin-dashboard/admissiondata" className="flex items-center gap-3 hover:text-yellow-400 transition">
+            <FaFileAlt /> Admission Data
+          </Link>
+          <Link to="/admin-dashboard/manage-events" className="flex items-center gap-3 hover:text-yellow-400 transition">
+            <FaFileAlt /> Manage Event Posts
+          </Link>
+          <Link to="/admin-dashboard/manage-shorts" className="flex items-center gap-3 hover:text-yellow-400 transition">
+            <FaVideo /> Manage Short Posts
+          </Link>
 
-      {posts.length > 0 ? (
-        <div className="grid grid-cols-3 gap-6">
-          {posts.map(post => (
-            <div key={post.id} className="border rounded-lg shadow p-4">
-              {post.file && (
-                <div className="w-full h-40 overflow-hidden rounded bg-gray-200 flex justify-center">
-                  {post.file.endsWith(".mp4") ? (
-                    <video controls className="h-full">
-                      <source src={post.file} type="video/mp4" />
-                    </video>
-                  ) : (
-                    <img src={post.file} className="h-full object-contain" />
-                  )}
-                </div>
-              )}
-              <p className="text-sm mt-2">{post.description}</p>
+        </nav>
+      </div>
 
-              <button
-                onClick={() => handleDelete(post.id)}
-                className="mt-3 bg-red-600 text-white px-4 py-1 rounded text-sm"
-              >
-                Delete
-              </button>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <p>No posts found.</p>
-      )}
+      <button
+        onClick={handleSignOut}
+        className="flex items-center gap-3 text-sm font-medium hover:text-yellow-400 transition"
+      >
+        <FaSignOutAlt /> Sign Out
+      </button>
     </div>
   );
 };
 
-export default AdminEventPosts;
+export default Sidebar;

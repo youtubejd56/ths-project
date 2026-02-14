@@ -179,9 +179,10 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 # Cloudinary Settings for Production
-if not DEBUG or os.getenv("CLOUDINARY_CLOUD_NAME"):
+CLOUDINARY_CLOUD_NAME = os.getenv('CLOUDINARY_CLOUD_NAME')
+if CLOUDINARY_CLOUD_NAME and CLOUDINARY_CLOUD_NAME != "dummy":
     CLOUDINARY_STORAGE = {
-        'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
+        'CLOUD_NAME': CLOUDINARY_CLOUD_NAME,
         'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
         'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
     }

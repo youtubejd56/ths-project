@@ -1,7 +1,14 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
-from cloudinary_storage.storage import VideoMediaCloudinaryStorage
+from django.core.files.storage import FileSystemStorage
+from django.core.exceptions import ImproperlyConfigured
+
+try:
+    from cloudinary_storage.storage import VideoMediaCloudinaryStorage
+    video_storage = VideoMediaCloudinaryStorage()
+except (ImportError, ImproperlyConfigured):
+    video_storage = FileSystemStorage()
 
 def validate_file_type(value):
     if not value:
@@ -105,7 +112,7 @@ class Shorts(models.Model):
     video = models.FileField(
         upload_to='shorts/',
         validators=[validate_file_type],
-        storage=VideoMediaCloudinaryStorage()
+        storage=video_storage
     )
     created_at = models.DateTimeField(auto_now_add=True)
 

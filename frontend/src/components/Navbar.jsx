@@ -27,43 +27,47 @@ const Navbar = () => {
 
   return (
     <div className="relative">
-      {/* Main Navbar */}
-      <div className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
-        ? 'bg-cyan-700 shadow-lg'
-        : 'bg-cyan-700'
+      {/* Fixed full-width navbar */}
+      <div className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-cyan-700 shadow-lg' : 'bg-cyan-700'
         }`}>
 
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo + Title */}
-            <div className="flex items-center gap-3 group cursor-pointer">
+        <header className="w-full h-16">
+          <div className="max-w-7xl mx-auto h-full flex items-center px-4 sm:px-6 lg:px-8">
+
+            {/* Logo + Title (Left) */}
+            <div className="flex items-center gap-3 cursor-pointer group">
               <img
-                className="w-12 h-12 rounded-md shadow-md group-hover:scale-105 transition-transform duration-300"
                 src={Logo}
                 alt="govt ths logo"
+                className="w-12 h-12 rounded-md shadow-md group-hover:scale-105 transition-transform duration-300"
               />
-              <h1 className="font-bold text-white text-xl md:text-2xl tracking-wide">
+              <h1 className="font-bold text-white text-lg sm:text-xl lg:text-2xl tracking-wide whitespace-nowrap">
                 GOVT.THS.PALA
               </h1>
             </div>
 
-            {/* Desktop Menu - Simple Text Links */}
+            {/* Spacer: pushes nav to right */}
+            <div className="flex-1"></div>
+
+            {/* Desktop Navigation */}
             <nav className="hidden md:block">
-              <ul className="flex items-center gap-6 lg:gap-8">
-                {navItems.map((item, idx) => (
-                  <li key={idx}>
+              <ul className="flex items-center gap-6 lg:gap-10 xl:gap-12">
+                {navItems.map((item, index) => (
+                  <li key={index}>
                     <NavLink
                       to={item.path}
-                      className={({ isActive }) => `relative font-semibold text-base transition-all duration-300 ${isActive
-                        ? 'text-white'
-                        : 'text-white/90 hover:text-white'
-                        }`}
+                      className={({ isActive }) =>
+                        `relative font-semibold text-white text-sm lg:text-base tracking-wide transition-all duration-300 ${isActive ? 'opacity-100' : 'opacity-90 hover:opacity-100'
+                        }`
+                      }
                     >
                       {({ isActive }) => (
                         <>
                           {item.label}
-                          <span className={`absolute -bottom-1 left-0 h-0.5 bg-white transition-all duration-300 ${isActive ? 'w-full' : 'w-0'
-                            }`}></span>
+                          <span
+                            className={`absolute left-0 -bottom-1 h-[2px] bg-white transition-all duration-300 ${isActive ? 'w-full' : 'w-0 group-hover:w-full'
+                              }`}
+                          ></span>
                         </>
                       )}
                     </NavLink>
@@ -72,26 +76,27 @@ const Navbar = () => {
               </ul>
             </nav>
 
-            {/* Mobile Menu Toggle - Only on Mobile */}
+            {/* Mobile Toggle */}
             <button
-              className="md:hidden z-50 relative group"
+              className="md:hidden ml-2"
               onClick={() => setOpenMenu(!openMenu)}
               aria-label="Toggle menu"
             >
-              <div className="bg-white/10 p-2 rounded-lg group-hover:bg-white/20 transition-all duration-300">
-                {openMenu ? (
-                  <X className="w-7 h-7 text-white" />
-                ) : (
-                  <Menu className="w-7 h-7 text-white" />
-                )}
-              </div>
+              {openMenu ? (
+                <X className="w-7 h-7 text-white" />
+              ) : (
+                <Menu className="w-7 h-7 text-white" />
+              )}
             </button>
           </div>
-        </div>
+        </header>
       </div>
 
-      {/* Spacer for fixed navbar */}
+      {/* Spacer for fixed height */}
       <div className="h-16"></div>
+
+      {/* (Your existing mobile overlay + mobile menu remains unchanged below this) */}
+
 
       {/* Background Overlay - Mobile Only */}
       <div

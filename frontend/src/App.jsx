@@ -21,249 +21,130 @@ import TermsOfService from "./components/TermsOfService";
 import ResetPassword from "./components/ResetPassword";
 import VerifyOtp from "./components/VerifyOtp";
 
+
+// NEW Manage Event Posts component
+import ManageEventPosts from "./components/ManageEventPosts";
+import ManageShortPosts from "./components/ManageShortPosts";
+
 function App() {
   return (
     <>
       <Routes>
         {/* ================= PUBLIC ROUTES ================= */}
-        <Route
-          path="/"
-          element={
-            <>
-              <Navbar />
-              <Hero />
-              <Footer />
-            </>
-          }
-        />
-        <Route
-          path="/admission"
-          element={
-            <>
-              <Navbar />
-              <Admission />
-              <Footer />
-            </>
-          }
-        />
-        <Route
-          path="/event"
-          element={
-            <>
-              <Navbar />
-              <Event />
-              <Footer />
-            </>
-          }
-        />
-        <Route
-          path="/admin-login"
-          element={
-            <>
-              <Navbar />
-              <AdminLogin />
-              <Footer />
-            </>
-          }
-        />
-        <Route
-          path="/adminlogin"
-          element={
-            <>
-              <Navbar />
-              <AdminLogin />
-              <Footer />
-            </>
-          }
-        />
-        <Route
-          path="/forgot-password"
-          element={
-            <>
-              <Navbar />
-              <ForgotPassword />
-              <Footer />
-            </>
-          }
-        />
-
-        {/* Reset password (expects user id param from reset email link) */}
-        <Route
-          path="/reset-password"
-          element={
-            <>
-              <Navbar />
-              <ResetPassword />
-              <Footer />
-            </>
-          }
-        />
-
-        {/* Verify OTP page */}
-        <Route
-          path="/verify-otp"
-          element={
-            <>
-              <Navbar />
-              <VerifyOtp />
-              <Footer />
-            </>
-          }
-        />
-
-        <Route
-          path="/shorts"
-          element={
-            <>
-              <Navbar />
-              <Short />
-              <Footer />
-            </>
-          }
-        />
-        <Route
-          path="/videos"
-          element={
-            <>
-              <Navbar />
-              <VideoUpload />
-              <Footer />
-            </>
-          }
-        />
-
-        {/* ================= PRIVACY & TERMS ================= */}
-        <Route
-          path="/privacy-policy"
-          element={
-            <>
-              <Navbar />
-              <PrivacyPolicy />
-              <Footer />
-            </>
-          }
-        />
-        <Route
-          path="/terms-of-service"
-          element={
-            <>
-              <Navbar />
-              <TermsOfService />
-              <Footer />
-            </>
-          }
-        />
+        <Route path="/" element={<><Navbar /><Hero /><Footer /></>} />
+        <Route path="/admission" element={<><Navbar /><Admission /><Footer /></>} />
+        <Route path="/event" element={<><Navbar /><Event /><Footer /></>} />
+        <Route path="/admin-login" element={<><Navbar /><AdminLogin /><Footer /></>} />
+        <Route path="/adminlogin" element={<><Navbar /><AdminLogin /><Footer /></>} />
+        <Route path="/forgot-password" element={<><Navbar /><ForgotPassword /><Footer /></>} />
+        <Route path="/reset-password" element={<><Navbar /><ResetPassword /><Footer /></>} />
+        <Route path="/verify-otp" element={<><Navbar /><VerifyOtp /><Footer /></>} />
+        <Route path="/shorts" element={<><Navbar /><Short /><Footer /></>} />
+        <Route path="/videos" element={<><Navbar /><VideoUpload /><Footer /></>} />
+        <Route path="/privacy-policy" element={<><Navbar /><PrivacyPolicy /><Footer /></>} />
+        <Route path="/terms-of-service" element={<><Navbar /><TermsOfService /><Footer /></>} />
 
         {/* ================= ADMIN DASHBOARD ROUTES ================= */}
-        <Route
-          path="/admin-dashboard"
-          element={
-            <ProtectedRoute>
-              <div className="flex">
-                <Sidebar />
-                <div className="ml-64 w-full bg-gray-100 min-h-screen p-6">
-                  <AdminDashboard />
-                </div>
-              </div>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin-dashboard/marklist"
-          element={
-            <ProtectedRoute>
-              <div className="flex">
-                <Sidebar />
-                <div className="ml-64 w-full bg-gray-100 min-h-screen p-6">
-                  <MarkList />
-                </div>
-              </div>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin-dashboard/admissiondata"
-          element={
-            <ProtectedRoute>
-              <div className="flex">
-                <Sidebar />
-                <div className="ml-64 w-full bg-gray-100 min-h-screen p-6">
-                  <AdmissionData />
-                </div>
-              </div>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/protectedroute"
-          element={
+        <Route path="/admin-dashboard" element={
+          <ProtectedRoute>
             <div className="flex">
               <Sidebar />
               <div className="ml-64 w-full bg-gray-100 min-h-screen p-6">
-                <ProtectedRoute />
+                <AdminDashboard />
               </div>
             </div>
-          }
-        />
-        <Route
-          path="/admin-dashboard/attendance"
-          element={
-            <ProtectedRoute>
-              <div className="flex">
-                <Sidebar />
-                <div className="ml-64 w-full bg-gray-100 min-h-screen p-6">
-                  <StudentAttendance />
-                </div>
+          </ProtectedRoute>
+        } />
+
+        <Route path="/admin-dashboard/marklist" element={
+          <ProtectedRoute>
+            <div className="flex">
+              <Sidebar />
+              <div className="ml-64 w-full bg-gray-100 min-h-screen p-6">
+                <MarkList />
               </div>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin-dashboard/attendance-view"
-          element={
-            <ProtectedRoute>
-              <div className="flex">
-                <Sidebar />
-                <div className="ml-64 w-full bg-gray-100 min-h-screen p-6">
-                  <ViewAttendance />
-                </div>
+            </div>
+          </ProtectedRoute>
+        } />
+
+        <Route path="/admin-dashboard/admissiondata" element={
+          <ProtectedRoute>
+            <div className="flex">
+              <Sidebar />
+              <div className="ml-64 w-full bg-gray-100 min-h-screen p-6">
+                <AdmissionData />
               </div>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin-dashboard/view-result"
-          element={
-            <ProtectedRoute>
-              <div className="flex">
-                <Sidebar />
-                <div className="ml-64 w-full bg-gray-100 min-h-screen p-6">
-                  <ViewResult />
-                </div>
+            </div>
+          </ProtectedRoute>
+        } />
+
+        <Route path="/admin-dashboard/attendance" element={
+          <ProtectedRoute>
+            <div className="flex">
+              <Sidebar />
+              <div className="ml-64 w-full bg-gray-100 min-h-screen p-6">
+                <StudentAttendance />
               </div>
-            </ProtectedRoute>
-          }
-        />
+            </div>
+          </ProtectedRoute>
+        } />
+
+        <Route path="/admin-dashboard/attendance-view" element={
+          <ProtectedRoute>
+            <div className="flex">
+              <Sidebar />
+              <div className="ml-64 w-full bg-gray-100 min-h-screen p-6">
+                <ViewAttendance />
+              </div>
+            </div>
+          </ProtectedRoute>
+        } />
+
+        <Route path="/admin-dashboard/view-result" element={
+          <ProtectedRoute>
+            <div className="flex">
+              <Sidebar />
+              <div className="ml-64 w-full bg-gray-100 min-h-screen p-6">
+                <ViewResult />
+              </div>
+            </div>
+          </ProtectedRoute>
+        } />
+
+        {/* ================= NEW: Manage Event Posts ================= */}
+        <Route path="/admin-dashboard/manage-events" element={
+          <ProtectedRoute>
+            <div className="flex">
+              <Sidebar />
+              <div className="ml-64 w-full bg-gray-100 min-h-screen p-6">
+                <ManageEventPosts />
+              </div>
+            </div>
+          </ProtectedRoute>
+        } />
+
+        {/* ================= NEW: Manage Short Posts ================= */}
+        <Route path="/admin-dashboard/manage-shorts" element={
+          <ProtectedRoute>
+            <div className="flex">
+              <Sidebar />
+              <div className="ml-64 w-full bg-gray-100 min-h-screen p-6">
+                <ManageShortPosts />
+              </div>
+            </div>
+          </ProtectedRoute>
+        } />
 
         {/* ================= REDIRECTS ================= */}
-        <Route
-          path="/attendance"
-          element={<Navigate to="/admin-dashboard/attendance" replace />}
-        />
-        <Route
-          path="/attendance-view"
-          element={<Navigate to="/admin-dashboard/attendance-view" replace />}
-        />
+        <Route path="/attendance" element={<Navigate to="/admin-dashboard/attendance" replace />} />
+        <Route path="/attendance-view" element={<Navigate to="/admin-dashboard/attendance-view" replace />} />
 
         {/* ================= FALLBACK 404 ================= */}
-        <Route
-          path="*"
-          element={
-            <div className="flex items-center justify-center h-screen text-2xl">
-              404 | Page Not Found
-            </div>
-          }
-        />
+        <Route path="*" element={
+          <div className="flex items-center justify-center h-screen text-2xl">
+            404 | Page Not Found
+          </div>
+        } />
       </Routes>
     </>
   );

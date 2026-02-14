@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Upload, X, Video, FileText, Image } from "lucide-react";
 import axios from "axios";
+import api from "../api/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import API_BASE_URL from "../api/config";
 
@@ -81,14 +82,22 @@ const Short = () => {
 
     try {
       setLoading(true);
-      await axios.post(API_URL, formData);
+      await axios.post(API_URL, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        }
+      });
       alert("✅ Video uploaded successfully!");
       handleRemoveVideo();
       setTitle("");
       setCaption("");
     } catch (err) {
       console.error(err);
-      alert("❌ Failed to upload video!");
+      if (err.response && err.response.data && err.response.data.error) {
+        alert(err.response.data.error);
+      } else {
+        alert("❌ Failed to upload video!");
+      }
     } finally {
       setLoading(false);
     }
