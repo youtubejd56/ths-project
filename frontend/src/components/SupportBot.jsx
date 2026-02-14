@@ -102,7 +102,7 @@ const SupportBot = () => {
             exit={{ scale: 0, y: 100 }}
             whileHover={{ scale: 1.1, y: -5 }}
             whileTap={{ scale: 0.9 }}
-            className="fixed bottom-8 right-8 w-16 h-16 rounded-full shadow-[0_15px_40px_rgba(79,70,229,0.5)] z-[500] flex items-center justify-center group overflow-hidden bg-white p-[3px]"
+            className="fixed bottom-8 right-8 w-16 h-16 rounded-full shadow-[0_15px_40px_rgba(79,70,229,0.5)] z-500 flex items-center justify-center group overflow-hidden bg-white p-[3px]"
           >
             {/* VIBRANT GRADIENT BORDER */}
             <div className="-inset-full bg-linear-to-r from-indigo-600 via-purple-600 to-pink-600 bg-size-[200%_200%] animate-gradient-flow rounded-full" />
@@ -199,7 +199,7 @@ const SupportBot = () => {
                         key={idx}
                         onClick={() => handleSend(action.query)}
                         className={`px-5 py-4 rounded-2xl border transition-all flex items-center justify-between group active:scale-[0.97] ${isDark
-                          ? 'bg-white/[0.04] border-white/5 text-slate-300 hover:bg-linear-to-r hover:from-indigo-600 hover:to-purple-600 hover:text-white hover:border-transparent'
+                          ? 'bg-white/4 border-white/5 text-slate-300 hover:bg-linear-to-r hover:from-indigo-600 hover:to-purple-600 hover:text-white hover:border-transparent'
                           : 'bg-slate-100 border-slate-200 text-slate-600 hover:bg-white hover:border-indigo-400 hover:text-indigo-600 shadow-sm'
                           }`}
                       >
@@ -222,7 +222,7 @@ const SupportBot = () => {
                   className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} relative z-10`}
                 >
                   <div className={`flex gap-3 max-w-[88%] ${msg.role === 'user' ? 'flex-row-reverse text-right' : ''}`}>
-                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 mt-1.5 shadow-xl transition-all ${msg.role === 'user'
+                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-1.5 shadow-xl transition-all ${msg.role === 'user'
                       ? 'bg-linear-to-tr from-indigo-600 to-purple-600 text-white'
                       : (isDark ? 'bg-white/10 text-indigo-400 border border-white/10' : 'bg-white text-indigo-600 border border-slate-200 shadow-md')
                       }`}>
@@ -233,7 +233,7 @@ const SupportBot = () => {
                       <div className={`px-5 py-4 text-[14px] leading-relaxed shadow-2xl font-medium transition-all duration-300 ${msg.role === 'user'
                         ? 'bg-linear-to-r from-indigo-600 to-purple-600 text-white rounded-[1.8rem] rounded-tr-none hover:brightness-110'
                         : (isDark
-                          ? 'bg-white/[0.05] text-slate-200 rounded-[1.8rem] rounded-tl-none border border-white/5 backdrop-blur-md hover:bg-white/[0.08]'
+                          ? 'bg-white/5 text-slate-200 rounded-[1.8rem] rounded-tl-none border border-white/5 backdrop-blur-md hover:bg-white/8'
                           : 'bg-white text-slate-800 rounded-[1.8rem] rounded-tl-none border border-slate-100 shadow-lg shadow-black/5')
                         }`}>
                         {msg.isHtml ? <div dangerouslySetInnerHTML={{ __html: msg.content }} className={`prose prose-sm ${isDark ? 'prose-invert' : 'prose-indigo'}`} /> : <p className="whitespace-pre-wrap">{msg.content}</p>}

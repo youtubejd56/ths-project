@@ -105,9 +105,9 @@ const Hero = () => {
         <div className="wrapper w-full h-8 bg-gray-400/20 bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 absolute -bottom-12" />
       </div>
 
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+      <div className="min-h-screen bg-linear-to-br from-slate-50 via-blue-50 to-indigo-50">
         {/* Malayalam Hero Section */}
-        <div className="relative overflow-hidden bg-gradient-to-r from-indigo-900 via-purple-900 to-indigo-800">
+        <div className="relative overflow-hidden bg-linear-to-r from-indigo-900 via-purple-900 to-indigo-800">
           <div className="absolute inset-0 bg-black/20"></div>
 
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
@@ -149,10 +149,10 @@ const Hero = () => {
         {/* About */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-4">
+            <h2 className="text-4xl md:text-5xl font-bold bg-linear-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-4">
               About Us
             </h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-indigo-600 to-purple-600 mx-auto rounded-full"></div>
+            <div className="w-24 h-1 bg-linear-to-r from-indigo-600 to-purple-600 mx-auto rounded-full"></div>
           </div>
 
           <div className="bg-white rounded-3xl shadow-xl p-8 md:p-12 border border-gray-100">
@@ -161,17 +161,17 @@ const Hero = () => {
             </p>
 
             <div className="grid md:grid-cols-3 gap-6 mt-12">
-              <div className="text-center p-6 bg-gradient-to-br from-indigo-50 to-blue-50 rounded-2xl">
+              <div className="text-center p-6 bg-linear-to-br from-indigo-50 to-blue-50 rounded-2xl">
                 <Users className="w-12 h-12 mx-auto text-indigo-600 mb-4" />
                 <h3 className="text-3xl font-bold text-gray-800 mb-2">213</h3>
                 <p className="text-gray-600">Students</p>
               </div>
-              <div className="text-center p-6 bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl">
+              <div className="text-center p-6 bg-linear-to-br from-purple-50 to-pink-50 rounded-2xl">
                 <Award className="w-12 h-12 mx-auto text-purple-600 mb-4" />
                 <h3 className="text-3xl font-bold text-gray-800 mb-2">7</h3>
                 <p className="text-gray-600">Branches</p>
               </div>
-              <div className="text-center p-6 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl">
+              <div className="text-center p-6 bg-linear-to-br from-blue-50 to-cyan-50 rounded-2xl">
                 <GraduationCap className="w-12 h-12 mx-auto text-blue-600 mb-4" />
                 <h3 className="text-3xl font-bold text-gray-800 mb-2">105</h3>
                 <p className="text-gray-600">Max Intake</p>
@@ -181,7 +181,7 @@ const Hero = () => {
         </div>
 
         {/* Extracurricular */}
-        <div className="bg-gradient-to-r from-indigo-600 to-purple-600 py-20">
+        <div className="bg-linear-to-r from-indigo-600 to-purple-600 py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-4 mb-8">
               <Cpu className="w-10 h-10 text-white" />
@@ -210,14 +210,14 @@ const Hero = () => {
 
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
               {['Modern Workshop', 'AC Computer Lab', 'Spacious Library', 'Auditorium', 'Open Library', 'Playground', 'Advanced Equipment', 'Student Managed'].map((facility, idx) => (
-                <div key={idx} className="bg-gradient-to-br from-indigo-50 to-purple-50 p-4 rounded-xl border border-indigo-100">
+                <div key={idx} className="bg-linear-to-br from-indigo-50 to-purple-50 p-4 rounded-xl border border-indigo-100">
                   <p className="text-center font-semibold text-gray-700">{facility}</p>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="mt-12 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-3xl p-8 border border-blue-100">
+          <div className="mt-12 bg-linear-to-r from-blue-50 to-indigo-50 rounded-3xl p-8 border border-blue-100">
             <h3 className="text-2xl font-bold text-gray-800 mb-4">Management</h3>
             <p className="text-lg text-gray-700">
               It is operated under the Department of Technology, Government of Kerala.
@@ -226,7 +226,7 @@ const Hero = () => {
         </div>
 
         {/* Location */}
-        <div className="bg-gradient-to-br from-gray-50 to-slate-100 py-20">
+        <div className="bg-linear-to-br from-gray-50 to-slate-100 py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-4 mb-8">
               <MapPin className="w-10 h-10 text-indigo-600" />

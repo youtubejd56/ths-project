@@ -113,11 +113,17 @@ class AdmissionView(APIView):
         phone = request.data.get('phone_num')
         name = request.data.get('student_name')
         address = request.data.get('address')
-        if phone and name and address:
-            admission = Admission(phone_num=phone, student_name=name, address=address)
-            admission.save()
-            return Response({'message': 'Admission submitted successfully!'}, status=status.HTTP_201_CREATED)
-        return Response({'error': 'All fields are required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        if not phone or not name or not address:
+            return Response({'error': 'All fields are required'}, status=status.HTTP_400_BAD_REQUEST)
+            
+        # Check if this mobile number already exists in the database
+        if Admission.objects.filter(phone_num=phone).exists():
+            return Response({'error': 'This mobile number has already been used for an admission.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        admission = Admission(phone_num=phone, student_name=name, address=address)
+        admission.save()
+        return Response({'message': 'Admission submitted successfully!'}, status=status.HTTP_201_CREATED)
 
 
 class AdmissionListView(APIView):

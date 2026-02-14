@@ -104,19 +104,19 @@ const Short = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 p-6">
+    <div className="flex justify-center items-center min-h-screen bg-linear-to-br from-indigo-50 via-purple-50 to-pink-50 p-6">
       <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl w-full max-w-3xl p-8 border border-white/20 relative overflow-hidden">
         {/* Decorative background elements */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-indigo-400/20 to-purple-400/20 rounded-full blur-3xl -z-0"></div>
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-pink-400/20 to-purple-400/20 rounded-full blur-3xl -z-0"></div>
+        <div className="absolute top-0 right-0 w-64 h-64 bg-linear-to-br from-indigo-400/20 to-purple-400/20 rounded-full blur-3xl z-0"></div>
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-linear-to-tr from-pink-400/20 to-purple-400/20 rounded-full blur-3xl z-0"></div>
 
         {/* Header */}
         <div className="relative z-10 mb-8">
           <div className="flex items-center gap-3 mb-2">
-            <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-3 rounded-2xl shadow-lg">
+            <div className="bg-linear-to-br from-indigo-500 to-purple-600 p-3 rounded-2xl shadow-lg">
               <Video className="text-white" size={28} />
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+            <h2 className="text-3xl md:text-4xl font-bold bg-linear-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
               Upload Short Video
             </h2>
           </div>
@@ -126,11 +126,11 @@ const Short = () => {
         {/* Upload Section */}
         <div className="relative z-10">
           {!video ? (
-            <label className="group relative flex flex-col items-center justify-center border-2 border-dashed border-indigo-300 rounded-2xl p-12 cursor-pointer hover:border-indigo-500 transition-all duration-300 bg-gradient-to-br from-indigo-50/50 to-purple-50/50 hover:from-indigo-100/50 hover:to-purple-100/50">
+            <label className="group relative flex flex-col items-center justify-center border-2 border-dashed border-indigo-300 rounded-2xl p-12 cursor-pointer hover:border-indigo-500 transition-all duration-300 bg-linear-to-br from-indigo-50/50 to-purple-50/50 hover:from-indigo-100/50 hover:to-purple-100/50">
               {/* Animated upload icon */}
               <div className="relative mb-4">
-                <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full blur-xl opacity-30 group-hover:opacity-50 transition-opacity animate-pulse"></div>
-                <div className="relative bg-gradient-to-br from-indigo-500 to-purple-600 p-4 rounded-2xl shadow-lg group-hover:scale-110 transition-transform duration-300">
+                <div className="absolute inset-0 bg-linear-to-r from-indigo-500 to-purple-600 rounded-full blur-xl opacity-30 group-hover:opacity-50 transition-opacity animate-pulse"></div>
+                <div className="relative bg-linear-to-br from-indigo-500 to-purple-600 p-4 rounded-2xl shadow-lg group-hover:scale-110 transition-transform duration-300">
                   <Upload className="text-white" size={40} />
                 </div>
               </div>
@@ -152,7 +152,7 @@ const Short = () => {
             </label>
           ) : (
             <div className="relative group">
-              <div className="absolute -inset-1 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-300"></div>
+              <div className="absolute -inset-1 bg-linear-to-r from-indigo-600 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-300"></div>
               <div className="relative">
                 <video
                   src={video}
@@ -242,7 +242,7 @@ const Short = () => {
               <button
                 onClick={handleSubmit}
                 disabled={loading}
-                className="relative px-8 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700 font-semibold transition-all duration-300 hover:shadow-xl hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 overflow-hidden group"
+                className="relative px-8 py-3 bg-linear-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700 font-semibold transition-all duration-300 hover:shadow-xl hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 overflow-hidden group"
               >
                 <span className="relative z-10 flex items-center justify-center gap-2">
                   {loading ? (
@@ -258,20 +258,20 @@ const Short = () => {
                   )}
                 </span>
                 {!loading && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="absolute inset-0 bg-linear-to-r from-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 )}
               </button>
 
               <button
                 type="button"
                 onClick={() => navigate("/videos")}
-                className="relative px-8 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl hover:from-green-700 hover:to-emerald-700 font-semibold transition-all duration-300 hover:shadow-xl hover:scale-105 overflow-hidden group"
+                className="relative px-8 py-3 bg-linear-to-r from-green-600 to-emerald-600 text-white rounded-xl hover:from-green-700 hover:to-emerald-700 font-semibold transition-all duration-300 hover:shadow-xl hover:scale-105 overflow-hidden group"
               >
                 <span className="relative z-10 flex items-center justify-center gap-2">
                   <Video size={18} />
                   View Videos
                 </span>
-                <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-teal-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute inset-0 bg-linear-to-r from-emerald-600 to-teal-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </button>
             </div>
           </div>

@@ -41,18 +41,19 @@ const Admission = () => {
 
     } catch (error) {
       console.error('Error submitting admission form:', error);
-      alert('Submission failed!');
+      const errorMsg = error.response?.data?.error || 'Submission failed!';
+      alert(errorMsg);
     }
   };
 
   const handleGoBack = () => navigate(-1);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 py-24 px-4">
+    <div className="min-h-screen bg-linear-to-br from-indigo-100 via-purple-50 to-pink-100 py-24 px-4">
       <div className="max-w-md mx-auto">
         <div className="bg-white rounded-2xl shadow-2xl overflow-hidden border border-indigo-100">
           {/* Header */}
-          <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 px-8 py-6">
+          <div className="bg-linear-to-r from-indigo-600 via-purple-600 to-pink-600 px-8 py-6">
             <h2 className="text-2xl font-bold text-white text-center tracking-wide">
               Student Application
             </h2>
@@ -128,7 +129,7 @@ const Admission = () => {
             <div className="flex gap-3 pt-4">
               <button
                 onClick={handleSubmit}
-                className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold py-3 px-6 rounded-xl hover:from-indigo-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+                className="flex-1 bg-linear-to-r from-indigo-600 to-purple-600 text-white font-semibold py-3 px-6 rounded-xl hover:from-indigo-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
               >
                 <Send className="h-5 w-5" />
                 Submit
@@ -136,7 +137,7 @@ const Admission = () => {
 
               <button
                 onClick={handleGoBack}
-                className="flex-1 bg-gradient-to-r from-gray-600 to-gray-700 text-white font-semibold py-3 px-6 rounded-xl hover:from-gray-700 hover:to-gray-800 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+                className="flex-1 bg-linear-to-r from-gray-600 to-gray-700 text-white font-semibold py-3 px-6 rounded-xl hover:from-gray-700 hover:to-gray-800 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
               >
                 <ArrowLeft className="h-5 w-5" />
                 Go Back
