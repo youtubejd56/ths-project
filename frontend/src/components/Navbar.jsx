@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import Logo from "../assets/ths_logo.jpg";
-import { Menu, X, Home, BookOpen, Calendar, Video, LogIn } from 'lucide-react';
+import { Menu, X, Home, BookOpen, Calendar, Video, LogIn, Smartphone } from 'lucide-react';
 
 const Navbar = () => {
   const [openMenu, setOpenMenu] = useState(false);
@@ -73,6 +73,16 @@ const Navbar = () => {
                     </NavLink>
                   </li>
                 ))}
+                <li>
+                  <a
+                    href="/ThsPro.apk"
+                    download="ths-pala-pro.apk"
+                    className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-full transition-all duration-300 border border-white/20 whitespace-nowrap"
+                  >
+                    <Smartphone className="w-4 h-4" />
+                    <span className="text-sm font-bold">Download THS Pro</span>
+                  </a>
+                </li>
               </ul>
             </nav>
 
@@ -206,6 +216,26 @@ const Navbar = () => {
                 </li>
               );
             })}
+
+            {/* Download App Mobile Button */}
+            <li
+              className="transform transition-all duration-500 delay-500"
+              style={{
+                opacity: openMenu ? 1 : 0,
+                transform: openMenu ? 'translateX(0) scale(1)' : 'translateX(50px) scale(0.8)'
+              }}
+            >
+              <a
+                href="/ThsPro.apk"
+                download="ths-pala-pro.apk"
+                className="group relative flex items-center gap-3 px-5 py-3.5 rounded-2xl transition-all duration-300 overflow-hidden bg-linear-to-r from-cyan-500 to-blue-600 text-white shadow-xl border border-white/20 mt-4"
+              >
+                <div className="p-2 rounded-lg bg-white/20 backdrop-blur-sm">
+                  <Smartphone className="w-5 h-5 text-white" />
+                </div>
+                <span className="font-bold text-base flex-1">Download THS Pro</span>
+              </a>
+            </li>
           </ul>
         </nav>
 

@@ -21,6 +21,8 @@ import TermsOfService from "./components/TermsOfService";
 import ResetPassword from "./components/ResetPassword";
 import VerifyOtp from "./components/VerifyOtp";
 
+import AdminLayout from "./components/AdminLayout";
+
 
 // NEW Manage Event Posts component
 import ManageEventPosts from "./components/ManageEventPosts";
@@ -47,91 +49,67 @@ function App() {
         {/* ================= ADMIN DASHBOARD ROUTES ================= */}
         <Route path="/admin-dashboard" element={
           <ProtectedRoute>
-            <div className="flex">
-              <Sidebar />
-              <div className="ml-64 w-full bg-gray-100 min-h-screen p-6">
-                <AdminDashboard />
-              </div>
-            </div>
+            <AdminLayout>
+              <AdminDashboard />
+            </AdminLayout>
           </ProtectedRoute>
         } />
 
         <Route path="/admin-dashboard/marklist" element={
           <ProtectedRoute>
-            <div className="flex">
-              <Sidebar />
-              <div className="ml-64 w-full bg-gray-100 min-h-screen p-6">
-                <MarkList />
-              </div>
-            </div>
+            <AdminLayout>
+              <MarkList />
+            </AdminLayout>
           </ProtectedRoute>
         } />
 
         <Route path="/admin-dashboard/admissiondata" element={
           <ProtectedRoute>
-            <div className="flex">
-              <Sidebar />
-              <div className="ml-64 w-full bg-gray-100 min-h-screen p-6">
-                <AdmissionData />
-              </div>
-            </div>
+            <AdminLayout>
+              <AdmissionData />
+            </AdminLayout>
           </ProtectedRoute>
         } />
 
         <Route path="/admin-dashboard/attendance" element={
           <ProtectedRoute>
-            <div className="flex">
-              <Sidebar />
-              <div className="ml-64 w-full bg-gray-100 min-h-screen p-6">
-                <StudentAttendance />
-              </div>
-            </div>
+            <AdminLayout>
+              <StudentAttendance />
+            </AdminLayout>
           </ProtectedRoute>
         } />
 
         <Route path="/admin-dashboard/attendance-view" element={
           <ProtectedRoute>
-            <div className="flex">
-              <Sidebar />
-              <div className="ml-64 w-full bg-gray-100 min-h-screen p-6">
-                <ViewAttendance />
-              </div>
-            </div>
+            <AdminLayout>
+              <ViewAttendance />
+            </AdminLayout>
           </ProtectedRoute>
         } />
 
         <Route path="/admin-dashboard/view-result" element={
           <ProtectedRoute>
-            <div className="flex">
-              <Sidebar />
-              <div className="ml-64 w-full bg-gray-100 min-h-screen p-6">
-                <ViewResult />
-              </div>
-            </div>
+            <AdminLayout>
+              <ViewResult />
+            </AdminLayout>
           </ProtectedRoute>
         } />
 
         {/* ================= NEW: Manage Event Posts ================= */}
         <Route path="/admin-dashboard/manage-events" element={
           <ProtectedRoute>
-            <div className="flex">
-              <Sidebar />
-              <div className="ml-64 w-full bg-gray-100 min-h-screen p-6">
-                <ManageEventPosts />
-              </div>
-            </div>
+            <AdminLayout>
+              <ManageEventPosts />
+            </AdminLayout>
           </ProtectedRoute>
         } />
 
         {/* ================= NEW: Manage Short Posts ================= */}
         <Route path="/admin-dashboard/manage-shorts" element={
           <ProtectedRoute>
-            <div className="flex">
-              <Sidebar />
-              <div className="ml-64 w-full bg-gray-100 min-h-screen p-6">
-                <ManageShortPosts />
-              </div>
-            </div>
+            <AdminLayout>
+              <ManageShortPosts />
+            </AdminLayout>
           </ProtectedRoute>
         } />
 

@@ -49,9 +49,36 @@ class EventPostViewSet(viewsets.ModelViewSet):
         return [IsAuthenticated()]
 
     def create(self, request, *args, **kwargs):
-        # Max 4 total posts
-        if EventPost.objects.count() >= 4:
-            return Response({"detail": "Max 4 posts allowed"}, status=status.HTTP_400_BAD_REQUEST)
+        # Get all posts ordered by creation date
+        all_posts = EventPost.objects.all().order_by('created_at')
+        total_count = all_posts.count()
+
+        # Monthly limit (4 weeks total)
+        if total_count >= 16:
+            return Response({"detail": "Maximum 16 posts allowed for this month (4 weeks)!"}, status=status.HTTP_400_BAD_REQUEST)
+
+        if total_count > 0:
+            first_post = all_posts.first()
+            now = timezone.now()
+            
+            # Calculate how many days since the first post
+            diff = now - first_post.created_at
+            days_passed = diff.days
+            current_week_index = days_passed // 7 # 0 for week 1, 1 for week 2, etc.
+
+            if current_week_index >= 4:
+                return Response({"detail": "The 4-week event period has ended."}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Define the start and end of the current week window
+            week_start = first_post.created_at + timedelta(days=current_week_index * 7)
+            week_end = week_start + timedelta(days=7)
+
+            # Count posts in this specific week window
+            posts_this_week = EventPost.objects.filter(created_at__range=(week_start, week_end)).count()
+
+            if posts_this_week >= 4:
+                return Response({"detail": f"Weekly limit reached! Please upload next week (Week {current_week_index + 2})."}, status=status.HTTP_400_BAD_REQUEST)
+
         return super().create(request, *args, **kwargs)
 
     def destroy(self, request, *args, **kwargs):

@@ -17,7 +17,6 @@ const SupportBot = () => {
   const quickActions = [
     { label: "📚 Admission Info", query: "Tell me about admission", icon: <Info size={14} /> },
     { label: "📅 Latest Events", query: "What are the latest events?", icon: <Calendar size={14} /> },
-    { label: "👨‍💻 Contact Dev", query: "contact developer", icon: <Phone size={14} /> },
   ];
 
   const scrollToBottom = () => {
@@ -125,7 +124,7 @@ const SupportBot = () => {
             animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
             exit={{ opacity: 0, y: 120, scale: 0.85, filter: "blur(20px)" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className={`fixed bottom-8 right-8 w-[420px] max-w-[calc(100vw-3rem)] h-[680px] rounded-[2.5rem] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.4)] z-1000 overflow-hidden flex flex-col ${isDark ? 'bg-slate-950 border-white/5' : 'bg-slate-50 border-slate-200'} border transition-colors duration-500`}
+            className={`fixed bottom-4 right-4 md:bottom-8 md:right-8 w-[calc(100vw-2rem)] md:w-[420px] h-[80vh] md:h-[680px] rounded-[2.5rem] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.4)] z-1000 overflow-hidden flex flex-col ${isDark ? 'bg-slate-950 border-white/5' : 'bg-slate-50 border-slate-200'} border transition-colors duration-500`}
           >
             {/* HEADER: USER REQUESTED Indigo-to-Purple Gradient */}
             <div className="relative pt-8 pb-6 px-7 bg-linear-to-r from-indigo-600 to-purple-600 flex items-center justify-between shadow-[0_10px_30px_-10px_rgba(79,70,229,0.5)]">

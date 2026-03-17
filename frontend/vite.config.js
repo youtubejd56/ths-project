@@ -11,9 +11,9 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
-        name: 'My Django React App',
-        short_name: 'MyApp',
-        description: 'A PWA built with Vite + React + Django backend',
+        name: 'THS Pala Pro',
+        short_name: 'THS Pala Pro',
+        description: 'Technical High School Pala – Learn • Build • Innovate Official Website',
         theme_color: '#000000',
         icons: [
           {

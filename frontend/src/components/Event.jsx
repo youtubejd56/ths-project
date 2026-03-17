@@ -11,6 +11,42 @@ const Event = () => {
   const [showModal, setShowModal] = useState(false);
   const [wordCount, setWordCount] = useState(0);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [weeklyStatus, setWeeklyStatus] = useState({ week: 1, count: 0, total: 0 });
+
+  const getWeeklyStatus = (allPosts) => {
+    if (allPosts.length === 0) return { week: 1, count: 0, total: 0 };
+
+    // Sort posts by created_at (oldest first)
+    const sortedPosts = [...allPosts]
+      .filter(p => p.created_at)
+      .sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+
+    if (sortedPosts.length === 0) return { week: 1, count: 0, total: 0 };
+
+    const firstPostDate = new Date(sortedPosts[0].created_at);
+    const now = new Date();
+
+    const diffMs = now - firstPostDate;
+    const diffDays = diffMs / (1000 * 60 * 60 * 24);
+    const currentWeekIndex = Math.floor(diffDays / 7);
+
+    // Calculate current week's posts
+    const weekStart = new Date(firstPostDate);
+    weekStart.setDate(weekStart.getDate() + currentWeekIndex * 7);
+    const weekEnd = new Date(weekStart);
+    weekEnd.setDate(weekEnd.getDate() + 7);
+
+    const postsThisWeek = allPosts.filter((p) => {
+      const d = new Date(p.created_at);
+      return d >= weekStart && d < weekEnd;
+    });
+
+    return {
+      week: currentWeekIndex + 1,
+      count: postsThisWeek.length,
+      total: allPosts.length,
+    };
+  };
 
   useEffect(() => {
     axios.get(`${API_BASE}/api/posts/`)
@@ -27,6 +63,7 @@ const Event = () => {
         }));
 
         setPosts(formatted);
+        setWeeklyStatus(getWeeklyStatus(formatted));
 
         const token = localStorage.getItem("token");
         setIsAdmin(!!token);
@@ -52,8 +89,20 @@ const Event = () => {
   };
 
   const handlePost = async () => {
-    if (posts.length >= 4) {
-      alert("Max 4 posts allowed!");
+    const status = getWeeklyStatus(posts);
+
+    if (posts.length >= 16) {
+      alert("Maximum 16 posts allowed for this month (4 weeks)!");
+      return;
+    }
+
+    if (status.week <= 4 && status.count >= 4) {
+      alert("Weekly limit reached! Please upload next week.");
+      return;
+    }
+
+    if (status.week > 4) {
+      alert("The 4-week event period has ended.");
       return;
     }
 
@@ -82,7 +131,9 @@ const Event = () => {
           : null,
       };
 
-      setPosts([newPost, ...posts]);
+      const updatedPosts = [newPost, ...posts];
+      setPosts(updatedPosts);
+      setWeeklyStatus(getWeeklyStatus(updatedPosts));
       setFile(null);
       setDescription("");
       setWordCount(0);
@@ -98,7 +149,9 @@ const Event = () => {
 
     try {
       await axios.delete(`${API_BASE}/api/posts/${id}/`);
-      setPosts(posts.filter((post) => post.id !== id));
+      const updatedPosts = posts.filter((post) => post.id !== id);
+      setPosts(updatedPosts);
+      setWeeklyStatus(getWeeklyStatus(updatedPosts));
     } catch (err) {
       console.error("Delete failed:", err);
     }
@@ -108,16 +161,25 @@ const Event = () => {
     <div className="px-4 sm:px-6 md:px-8 py-6 min-h-screen pb-32">
       <h2 className="text-2xl sm:text-3xl font-bold mb-6">Event Posts</h2>
 
-      {posts.length < 4 ? (
-        <button
-          onClick={() => setShowModal(true)}
-          className="mb-6 bg-green-700 hover:bg-green-500 text-white px-4 sm:px-6 py-2 rounded text-sm sm:text-base"
-        >
-          + Create Post
-        </button>
-      ) : (
-        <p className="text-red-600 mb-4 text-sm sm:text-base">Maximum 4 posts allowed!</p>
-      )}
+      <div className="mb-6">
+        {weeklyStatus.total >= 16 ? (
+          <p className="text-red-600 font-medium">Maximum 16 posts reached for the month!</p>
+        ) : weeklyStatus.week > 4 ? (
+          <p className="text-red-600 font-medium">Event period (4 weeks) has ended!</p>
+        ) : weeklyStatus.count >= 4 ? (
+          <div className="flex flex-col gap-2">
+            <p className="text-orange-600 font-medium">Weekly limit reached (4/4)!</p>
+            <p className="text-gray-600 text-sm">Please upload next week (Week {weeklyStatus.week + 1})</p>
+          </div>
+        ) : (
+          <button
+            onClick={() => setShowModal(true)}
+            className="bg-green-700 hover:bg-green-500 text-white px-4 sm:px-6 py-2 rounded text-sm sm:text-base shadow-lg transition-all"
+          >
+            + Create Post (Week {weeklyStatus.week}: {weeklyStatus.count}/4)
+          </button>
+        )}
+      </div>
 
       {showModal && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 px-2">
@@ -201,14 +263,6 @@ const Event = () => {
                 <p className="text-gray-800 text-sm sm:text-base mt-2 break-words line-clamp-4">{post.description}</p>
               )}
 
-              {isAdmin && (
-                <button
-                  onClick={() => handleRemovePost(post.id)}
-                  className="mt-4 bg-red-600 hover:bg-red-500 text-white px-4 py-1 sm:px-5 sm:py-2 rounded text-sm sm:text-base w-fit"
-                >
-                  Remove
-                </button>
-              )}
             </div>
           ))}
         </div>

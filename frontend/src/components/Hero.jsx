@@ -3,7 +3,7 @@ import Images1 from '../assets/images4.PNG';
 import Images2 from '../assets/Images_side_views.PNG';
 import Images3 from '../assets/images_side.jpg';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { MapPin, Award, Users, BookOpen, Cpu, GraduationCap } from 'lucide-react';
+import { MapPin, Award, Users, BookOpen, Cpu, GraduationCap, Smartphone } from 'lucide-react';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -116,9 +116,17 @@ const Hero = () => {
                 Government Technical High School
               </h1>
               <p className="text-xl md:text-2xl text-indigo-200 font-semibold">Pala, Kottayam</p>
-              <div className="mt-4 flex justify-center gap-2">
+              <div className="mt-6 flex flex-wrap justify-center gap-4">
                 <span className="px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-white text-sm">Est. 1961</span>
                 <span className="px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-white text-sm">Kerala, India</span>
+                <a
+                  href="/ThsPro.apk"
+                  download="ths-pala-pro.apk"
+                  className="px-4 py-2 bg-white/15 hover:bg-white/25 backdrop-blur-md rounded-full text-white text-sm font-bold flex items-center gap-2 transition-all duration-300 border border-white/20 hover:scale-105 active:scale-95"
+                >
+                  <Smartphone size={14} className="text-cyan-400" />
+                  Download THS Pro
+                </a>
               </div>
             </div>
 
@@ -173,7 +181,7 @@ const Hero = () => {
               </div>
               <div className="text-center p-6 bg-linear-to-br from-blue-50 to-cyan-50 rounded-2xl">
                 <GraduationCap className="w-12 h-12 mx-auto text-blue-600 mb-4" />
-                <h3 className="text-3xl font-bold text-gray-800 mb-2">105</h3>
+                <h3 className="text-3xl font-bold text-gray-800 mb-2">142</h3>
                 <p className="text-gray-600">Max Intake</p>
               </div>
             </div>
@@ -260,7 +268,7 @@ const Hero = () => {
             <SupportBot />
           </div>
         )}
-      </div>
+      </div >
     </>
   );
 };
