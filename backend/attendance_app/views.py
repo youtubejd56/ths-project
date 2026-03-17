@@ -49,35 +49,42 @@ class EventPostViewSet(viewsets.ModelViewSet):
         return [IsAuthenticated()]
 
     def create(self, request, *args, **kwargs):
-        # Get all posts ordered by creation date
-        all_posts = EventPost.objects.all().order_by('created_at')
-        total_count = all_posts.count()
+        now = timezone.now()
+        current_month = now.month
+        current_year = now.year
+        current_day = now.day
 
-        # Monthly limit (4 weeks total)
-        if total_count >= 16:
-            return Response({"detail": "Maximum 16 posts allowed for this month (4 weeks)!"}, status=status.HTTP_400_BAD_REQUEST)
+        # Filter posts from THIS calendar month only
+        posts_this_month = EventPost.objects.filter(
+            created_at__month=current_month,
+            created_at__year=current_year
+        )
 
-        if total_count > 0:
-            first_post = all_posts.first()
-            now = timezone.now()
-            
-            # Calculate how many days since the first post
-            diff = now - first_post.created_at
-            days_passed = diff.days
-            current_week_index = days_passed // 7 # 0 for week 1, 1 for week 2, etc.
+        # Monthly limit (16 posts per calendar month)
+        if posts_this_month.count() >= 16:
+            return Response({"detail": "Maximum 16 posts allowed for this month!"}, status=status.HTTP_400_BAD_REQUEST)
 
-            if current_week_index >= 4:
-                return Response({"detail": "The 4-week event period has ended."}, status=status.HTTP_400_BAD_REQUEST)
+        # Determine week index (0, 1, 2, or 3)
+        week_index = (current_day - 1) // 7
+        if week_index > 3:
+            week_index = 3
+        
+        # Define the day range for the current week
+        week_start_day = week_index * 7 + 1
+        if week_index < 3:
+            week_end_day = (week_index + 1) * 7
+        else:
+            # Week 4 goes to the end of the month
+            _, last_day = calendar.monthrange(current_year, current_month)
+            week_end_day = last_day
 
-            # Define the start and end of the current week window
-            week_start = first_post.created_at + timedelta(days=current_week_index * 7)
-            week_end = week_start + timedelta(days=7)
+        # Count posts in this specific week of the current month
+        posts_this_week = posts_this_month.filter(
+            created_at__day__range=(week_start_day, week_end_day)
+        ).count()
 
-            # Count posts in this specific week window
-            posts_this_week = EventPost.objects.filter(created_at__range=(week_start, week_end)).count()
-
-            if posts_this_week >= 4:
-                return Response({"detail": f"Weekly limit reached! Please upload next week (Week {current_week_index + 2})."}, status=status.HTTP_400_BAD_REQUEST)
+        if posts_this_week >= 4:
+            return Response({"detail": f"Weekly limit reached (Week {week_index + 1})! Please upload next week."}, status=status.HTTP_400_BAD_REQUEST)
 
         return super().create(request, *args, **kwargs)
 

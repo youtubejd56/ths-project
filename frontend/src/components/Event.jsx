@@ -14,37 +14,36 @@ const Event = () => {
   const [weeklyStatus, setWeeklyStatus] = useState({ week: 1, count: 0, total: 0 });
 
   const getWeeklyStatus = (allPosts) => {
-    if (allPosts.length === 0) return { week: 1, count: 0, total: 0 };
-
-    // Sort posts by created_at (oldest first)
-    const sortedPosts = [...allPosts]
-      .filter(p => p.created_at)
-      .sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
-
-    if (sortedPosts.length === 0) return { week: 1, count: 0, total: 0 };
-
-    const firstPostDate = new Date(sortedPosts[0].created_at);
     const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+    const currentDay = now.getDate();
 
-    const diffMs = now - firstPostDate;
-    const diffDays = diffMs / (1000 * 60 * 60 * 24);
-    const currentWeekIndex = Math.floor(diffDays / 7);
+    // Determine week of the month (1, 2, 3, or 4)
+    let weekIndex = Math.floor((currentDay - 1) / 7);
+    if (weekIndex > 3) weekIndex = 3; // Days 22 to end of month are Week 4
 
-    // Calculate current week's posts
-    const weekStart = new Date(firstPostDate);
-    weekStart.setDate(weekStart.getDate() + currentWeekIndex * 7);
-    const weekEnd = new Date(weekStart);
-    weekEnd.setDate(weekEnd.getDate() + 7);
-
-    const postsThisWeek = allPosts.filter((p) => {
+    // Filter posts from THIS calendar month only
+    const postsThisMonth = allPosts.filter((p) => {
+      if (!p.created_at) return false;
       const d = new Date(p.created_at);
-      return d >= weekStart && d < weekEnd;
+      return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+    });
+
+    // Count posts in the CURRENT week only
+    const weekStartDay = weekIndex * 7 + 1;
+    const weekEndDay = weekIndex === 3 ? 31 : (weekIndex + 1) * 7;
+
+    const postsThisWeek = postsThisMonth.filter((p) => {
+      const d = new Date(p.created_at);
+      const day = d.getDate();
+      return day >= weekStartDay && day <= weekEndDay;
     });
 
     return {
-      week: currentWeekIndex + 1,
+      week: weekIndex + 1,
       count: postsThisWeek.length,
-      total: allPosts.length,
+      total: postsThisMonth.length,
     };
   };
 
